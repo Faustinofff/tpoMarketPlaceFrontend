@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .cuadrado {
+        border: 1px solid black;
+        width: 5em;
+        height: 5em;
+      }
+      .rojo {
+        background-color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Clase de DOM</h1>
+    <h2>Estamos viendo un ejemplo</h2>
+<button id="agregar">AGREGAR</button>
+    <div class="cuadrado rojo"></div>
+
+    <script>
+      const agregar = document.getElementById("agregar")
+      const body = document.getElementsByTagName('body')[0]
+
+      const cb = ()=>{
+        const nuevoDiv = document.createElement('div')
+        nuevoDiv.classList.add('cuadrado')
+        nuevoDiv.classList.add('rojo')
+        nuevoDiv.addEventListener('click', (event)=> {
+          event.target.remove()
+        })
+
+        body.appendChild(nuevoDiv)
+        
+      }
+
+      agregar.addEventListener("click", cb)
+      
+      
+    </script>
+  </body>
+</html>
