@@ -9,9 +9,9 @@ export default function Navigation() {
         borderImage: 'linear-gradient(to right, #000000 0%, #00f0ff 50%, #000000 100%) 1',
       }}
     >
-      {/* LOGO */}
       <h1
-        className="text-white hover:text-[#00f0ff] transition-colors duration-300 cursor-pointer text-2xl font-bold"
+        className="text-2xl font-bold"
+        style={{ color: 'white' }}
       >
         ElectroShop
       </h1>
