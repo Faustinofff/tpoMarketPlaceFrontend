@@ -5,8 +5,6 @@ import Navigation from './views/Navigation';
 import ProductsView from './views/ProductsView';
 import { Routes, Route } from 'react-router-dom';
 import Login from './views/Login';
-import Cart from "./views/Cart.jsx";
-
 
 
 function App() {
@@ -20,7 +18,6 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/productos" element={<ProductsView />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/cart" element={<Cart />} />
       </Routes>
     </>
   );

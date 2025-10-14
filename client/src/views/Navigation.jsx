@@ -34,10 +34,6 @@ export default function Navigation() {
           Login
         </Link>
 
-        <Link to="/cart" className="hover:text-blue-400">
-          Carrito
-        </Link>
-
         <Link
           to="/contact"
           className="no-underline text-white hover:text-[#00f0ff] transition-colors duration-200"
