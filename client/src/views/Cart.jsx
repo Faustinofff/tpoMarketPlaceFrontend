@@ -1,8 +1,10 @@
 import { useContext } from "react";
 import { CartContext } from "../context/CartContext";
+import { useNavigate } from "react-router-dom";  // Para redirigir al checkout
 
 export default function Cart() {
   const { cart, removeFromCart, clearCart } = useContext(CartContext);
+  const navigate = useNavigate();  // Usado para redirigir al usuario al checkout
 
   if (!cart) return <p className="text-white p-4">Cargando carrito...</p>;
   if (cart.items.length === 0)
@@ -38,6 +40,14 @@ export default function Cart() {
         className="mt-4 bg-blue-500 px-4 py-2 rounded hover:bg-blue-600"
       >
         Vaciar carrito
+      </button>
+
+      {/* Agregamos el botón de checkout */}
+      <button
+        onClick={() => navigate("/checkout")}
+        className="mt-4 bg-green-500 px-4 py-2 rounded hover:bg-green-600"
+      >
+        Finalizar compra
       </button>
     </div>
   );
