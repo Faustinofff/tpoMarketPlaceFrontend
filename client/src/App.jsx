@@ -1,7 +1,7 @@
 import './index.css';
 import Contact from './views/Contact';
 import Home from './views/Home';
-import Navigation from './views/navigation';
+import Navigation from './views/Navigation';
 import ProductsView from './views/ProductsView';
 import { Routes, Route } from 'react-router-dom';
 import Login from './views/Login';
@@ -28,3 +28,4 @@ function App() {
 }
 
 export default App;
+

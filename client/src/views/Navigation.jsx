@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 export default function Navigation() {
   return (
     <nav
-      className="bg-gradient-to-r from-[#000000] via-[#0a0a20] to-[#000033] text-white px-8 py-3 flex items-center justify-between shadow-md
+      className="bg-gradient-to-r from-[#121212] via-[#0a0a20] to-[#000033] text-white px-8 py-3 flex items-center justify-between shadow-md
                  border-b border-t border-transparent border-image-slice-1 border-image-repeat-stretch"
       style={{
         borderImage: 'linear-gradient(to right, #000000 0%, #00f0ff 50%, #000000 100%) 1',
