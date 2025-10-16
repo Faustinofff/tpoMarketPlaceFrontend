@@ -10,23 +10,22 @@ export default function Cart() {
   if (cart.items.length === 0)
     return <h2 className="text-white p-4">🛒 Tu carrito está vacío</h2>;
 
-  // Verifica si el total de productos (sumando las cantidades) es 3 o más
+  // Calcular cantidad total de productos
   const totalItems = cart.items.reduce((acc, item) => acc + item.quantity, 0);
 
   // Verifica si el carrito es elegible para descuento
   const discountEligible = totalItems >= 3;
 
-  // Calcular el total con y sin descuento
+  // Calcular totales
   const totalPrice = cart.total;
-  const discountPrice = discountEligible ? totalPrice * 0.8 : totalPrice; // Aplicar 20% de descuento
+  const discountPrice = totalPrice * 0.8;
 
-  // Guardamos el precio con descuento en el estado del carrito (si es necesario)
-  cart.discountPrice = discountPrice;
-
-  console.log("Total de unidades en el carrito:", totalItems);
-  console.log("Total sin descuento:", totalPrice);
-  console.log("Descuento aplicado:", discountEligible);
-  console.log("Total con descuento:", discountPrice);
+  // 🔧 Solo guardamos el descuento si aplica
+  if (discountEligible) {
+    cart.discountPrice = discountPrice;
+  } else {
+    delete cart.discountPrice; // Eliminamos si no aplica
+  }
 
   return (
     <div className="p-6 text-white">
