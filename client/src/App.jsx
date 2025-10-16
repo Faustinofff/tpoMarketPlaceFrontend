@@ -1,7 +1,7 @@
 import './index.css';
 import Contact from './views/Contact';
 import Home from './views/Home';
-import Navigation from './views/Navigation';
+import Navigation from './views/navigation';
 import ProductsView from './views/ProductsView';
 import ProductDetail from './views/ProductDetail';
 import { Routes, Route } from 'react-router-dom';
@@ -24,6 +24,8 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/order-confirmation" element={<OrderConfirmation />} />
+        <Route path="/producto/:id" element={<ProductDetail />} />
+
       </Routes>
     </>
   );

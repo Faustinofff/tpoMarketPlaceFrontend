@@ -1,32 +1,65 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { CartContext } from "../context/CartContext";
 
 export default function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { addToCart } = useContext(CartContext);
 
   useEffect(() => {
-    fetch(`http://localhost:8080/api/v1/products/${id}`)
-      .then(res => {
-        if (!res.ok) throw new Error("Producto no encontrado");
-        return res.json();
-      })
-      .then(data => setProduct(data))
-      .catch(err => console.error(err));
+    const fetchProduct = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(`http://localhost:4002/api/v1/products/${id}`);
+        if (!res.ok) throw new Error(`Producto no encontrado (HTTP ${res.status})`);
+        const data = await res.json();
+        setProduct(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProduct();
   }, [id]);
 
-  if (!product) return <p className="text-center mt-10 text-xl text-white">Cargando producto...</p>;
+  if (loading) return <p className="text-white text-center mt-10">Cargando producto...</p>;
+  if (error) return <p className="text-red-500 text-center mt-10">{error}</p>;
+
+  const precioFormateado = product.price ? Number(product.price).toLocaleString("es-AR") : "N/A";
+  const sinStock = product.stock === 0;
+  const imageUrl = product.imageUrl || "/placeholder.png";
 
   return (
-    <div className="max-w-4xl mx-auto p-8">
+    <div className="max-w-4xl mx-auto p-8 bg-[#0a0a20] rounded-xl shadow-lg">
       <img
-        src={product.imageUrl}
+        src={imageUrl}
         alt={product.name}
-        className="w-full h-96 object-cover rounded"
+        className="w-[300px] h-[300px] object-cover rounded mx-auto" 
       />
       <h1 className="text-4xl font-bold mt-4 text-white">{product.name}</h1>
-      <p className="text-2xl text-gray-300 mt-2">${Number(product.price).toLocaleString("es-AR")}</p>
+      <p className="text-2xl text-gray-300 mt-2">${precioFormateado}</p>
       <p className="mt-4 text-gray-400">{product.description}</p>
+
+      {/* Botón dentro del detalle */}
+      {sinStock ? (
+        <button
+          className="mt-6 w-full bg-red-600 text-white py-2 rounded-md cursor-not-allowed"
+          disabled
+        >
+          AGOTADO
+        </button>
+      ) : (
+        <button
+          className="mt-6 w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-md"
+          onClick={() => addToCart(product.id)}
+        >
+          Agregar al carrito
+        </button>
+      )}
     </div>
   );
 }
