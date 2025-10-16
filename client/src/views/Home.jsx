@@ -16,8 +16,9 @@ export default function Home() {
         <div className="absolute top-1/2 right-1/6 transform -translate-y-1/2">
             <button
                 onClick={() => window.location.href = "/productos"}
+                style={{ color: 'white' }}
                 className="bg-gradient-to-r from-[#000033] via-[#1e3fff] to-[#00ffff]
-                        text-white font-extrabold 
+                        text-white font-extrabold tracking-wider
                         text-8xl h-[50px] w-[200px]
                         rounded-full shadow-2xl 
                         hover:scale-110 transition-transform duration-300 flex items-center justify-center whitespace-nowrap"

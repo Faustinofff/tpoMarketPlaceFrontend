@@ -54,7 +54,11 @@ export default function ProductDetail() {
         </button>
       ) : (
         <button
-          className="mt-6 w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-md"
+          className="bg-gradient-to-r from-[#000033] via-[#1e3fff] to-[#00ffff]
+                        text-white font-extrabold 
+                        text-8xl h-[50px] w-[200px]
+                        rounded-full shadow-2xl 
+                        hover:scale-110 transition-transform duration-300 flex items-center justify-center whitespace-nowrap"
           onClick={() => addToCart(product.id)}
         >
           Agregar al carrito

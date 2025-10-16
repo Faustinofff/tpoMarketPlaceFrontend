@@ -44,7 +44,11 @@ export default function Cart() {
             </div>
             <button
               onClick={() => removeFromCart(item.product.id)}
-              className="bg-red-600 px-3 py-1 rounded hover:bg-red-700"
+              className="bg-gradient-to-r from-[#000033] via-[#1e3fff] to-[#00ffff]
+                        text-white font-extrabold 
+                        text-8xl h-[50px] w-[200px]
+                        rounded-full shadow-2xl 
+                        hover:scale-110 transition-transform duration-300 flex items-center justify-center whitespace-nowrap"
             >
               Eliminar
             </button>
@@ -61,14 +65,22 @@ export default function Cart() {
 
       <button
         onClick={() => clearCart()}
-        className="mt-4 bg-blue-500 px-4 py-2 rounded hover:bg-blue-600"
+        className="bg-gradient-to-r from-[#000033] via-[#1e3fff] to-[#00ffff]
+                        text-white font-extrabold 
+                        text-8xl h-[50px] w-[200px]
+                        rounded-full shadow-2xl 
+                        hover:scale-110 transition-transform duration-300 flex items-center justify-center whitespace-nowrap"
       >
         Vaciar carrito
       </button>
 
       <button
         onClick={() => navigate("/checkout")}
-        className="mt-4 bg-green-500 px-4 py-2 rounded hover:bg-green-600"
+        className="bg-gradient-to-r from-[#000033] via-[#1e3fff] to-[#00ffff]
+                        text-white font-extrabold 
+                        text-8xl h-[50px] w-[200px]
+                        rounded-full shadow-2xl 
+                        hover:scale-110 transition-transform duration-300 flex items-center justify-center whitespace-nowrap"
       >
         Checkout
       </button>

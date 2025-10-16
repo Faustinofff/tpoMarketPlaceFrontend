@@ -14,7 +14,11 @@ export default function OrderConfirmation() {
       
       <button
         onClick={() => navigate("/home")}
-        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+        className="bg-gradient-to-r from-[#000033] via-[#1e3fff] to-[#00ffff]
+                        text-white font-extrabold 
+                        text-8xl h-[50px] w-[200px]
+                        rounded-full shadow-2xl 
+                        hover:scale-110 transition-transform duration-300 flex items-center justify-center whitespace-nowrap"
       >
         Volver al inicio
       </button>

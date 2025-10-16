@@ -68,7 +68,11 @@ export default function Checkout() {
         )}
         <button
           onClick={handleCheckout}
-          className="mt-4 bg-green-500 px-4 py-2 rounded hover:bg-green-600"
+          className="bg-gradient-to-r from-[#000033] via-[#1e3fff] to-[#00ffff]
+                        text-white font-extrabold 
+                        text-8xl h-[50px] w-[200px]
+                        rounded-full shadow-2xl 
+                        hover:scale-110 transition-transform duration-300 flex items-center justify-center whitespace-nowrap"
         >
           Finalizar compra
         </button>
