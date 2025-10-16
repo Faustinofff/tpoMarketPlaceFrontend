@@ -26,7 +26,7 @@ return (
     </div>
 
       {/* Título Productos Destacados - (ESTO NO SE MODIFICA) */}
-    <h2 className="text-2xl font-bold py-8 px-4 text-white">Productos Destacados</h2>
+    
 
       {/* 🚨 REEMPLAZO CLAVE: Eliminamos el div del grid y lo reemplazamos por el componente ProductList */}
     
