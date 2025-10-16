@@ -1,42 +1,37 @@
-// 🚨 IMPORTACIÓN CLAVE: Debemos importar ProductList para poder usarlo.
 import ProductList from '../components/ProductList';
 
 export default function Home() {
-return (
-    <div className="bg-gradient-to-r from-[#000000] from-0% via-[#0a0a20] via-30% to-[#000033] to-80% min-h-screen">
-    
-      {/* Hero con imagen - (ESTO NO SE MODIFICA) */}
-    <div className="relative w-full">
-        <img
-            src="/ip.png"
-            alt="Imagen futurista gamer"
-            className="w-full h-[500px] object-cover"
+  return (
+    <div className="bg-gradient-to-r from-[#000000] via-[#0a0a20] to-[#000033] min-h-screen">
+      
+      {/* Hero con imagen */}
+      <div className="relative w-full h-[500px]">
+        <img
+          src="/ip.png"
+          alt="Imagen futurista gamer"
+          className="w-full h-full object-cover"
         />
 
-
-        {/* Botón encima de la imagen - (ESTO NO SE MODIFICA) */}
-        <div className="absolute inset-0 flex justify-center items-start pt-20">
-        <a
-            href="/productos"
-            className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold shadow-lg"
-        >
-            Ver todos los productos
-        </a>
-        </div>
-    </div>
-
-      {/* Título Productos Destacados - (ESTO NO SE MODIFICA) */}
-    <h2 className="text-2xl font-bold py-8 px-4 text-white">Productos Destacados</h2>
-
-      {/* 🚨 REEMPLAZO CLAVE: Eliminamos el div del grid y lo reemplazamos por el componente ProductList */}
-    
-        {/*
-            COMENTARIO: Tu componente ProductList.jsx ya contiene la lógica del grid:
-            <div className="grid grid-cols-3 gap-8 px-6"> ... </div>.
-            Por lo tanto, solo necesitamos llamar al componente aquí.
-        */}
-        <ProductList /> 
-
-    </div>
-)
+        {/* Botón futurista gigante, más a la derecha */}
+        <div className="absolute top-1/2 right-1/6 transform -translate-y-1/2">
+            <button
+                onClick={() => window.location.href = "/productos"}
+                className="bg-gradient-to-r from-[#000033] via-[#1e3fff] to-[#00ffff]
+                        text-white font-extrabold 
+                        text-8xl h-[50px] w-[200px]
+                        rounded-full shadow-2xl 
+                        hover:scale-110 transition-transform duration-300 flex items-center justify-center whitespace-nowrap"
+            >
+                Ver todos los productos
+            </button>
+        </div>
+      </div>
+      <h2>­­­­</h2>
+      <h3>­­</h3>
+      {/* Lista de productos */}
+      <ProductList />
+      <h4>­</h4>
+      <h5>­</h5>
+    </div>
+  );
 }
