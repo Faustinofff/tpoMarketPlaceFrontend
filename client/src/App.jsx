@@ -9,6 +9,8 @@ import Login from './views/Login';
 import Cart from "./views/Cart.jsx";
 import Checkout from "./views/Checkout.jsx";
 import OrderConfirmation from "./views/OrderConfirmation.jsx";
+import logo from '/logo.png'
+
 
 function App() {
   return (
