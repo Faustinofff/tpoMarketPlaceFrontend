@@ -7,6 +7,7 @@ const ProductCard = ({ id, nombre, precio, imagenUrl }) => {
     <Link
       to={`/producto/${id}`}
       className="bg-[#0a0a20] rounded-2xl border border-gray-700 shadow-md hover:scale-105 transition-transform flex flex-col overflow-hidden w-[260px] h-[420px] no-underline"
+      style={{ color: "white", textDecoration: "none" }} // fuerza el color blanco
     >
       {/* Imagen cuadrada */}
       <div className="w-full aspect-square overflow-hidden">
@@ -18,11 +19,27 @@ const ProductCard = ({ id, nombre, precio, imagenUrl }) => {
       </div>
 
       {/* Contenido */}
-      <div className="p-3 flex-1 flex flex-col justify-center">
-        <h3 className="text-white font-semibold text-lg hover:text-[#00f0ff] transition-colors duration-200">
+      <div className="p-3 flex-1 flex flex-col justify-center gap-1">
+        <h3
+          style={{
+            color: "white",
+            fontWeight: "800",
+            fontSize: "1.2rem",
+            margin: 0,
+          }}
+        >
           {nombre}
         </h3>
-        <p className="text-white mt-1">${precioFormateado}</p>
+        <p
+          style={{
+            color: "white",
+            fontWeight: "800",
+            fontSize: "1.5rem",
+            margin: 0,
+          }}
+        >
+          ${precioFormateado}
+        </p>
       </div>
     </Link>
   );
