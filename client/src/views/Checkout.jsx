@@ -10,6 +10,9 @@ export default function Checkout() {
   // Obtener el token del almacenamiento local
   const token = localStorage.getItem("token");
 
+  // Usamos el precio con descuento guardado en el carrito
+  const discountPrice = cart.discountPrice || cart.total;  // Si no hay descuento, usar el total
+
   const handleCheckout = async () => {
     if (!token) {
       alert("No estás autenticado. Por favor, inicia sesión.");
@@ -22,17 +25,17 @@ export default function Checkout() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,  // Aquí agregamos el token en los encabezados
+          Authorization: `Bearer ${token}`, // Aquí agregamos el token en los encabezados
         },
         body: JSON.stringify({
           name,
-          total: cart.total,
+          total: discountPrice,  // Enviamos el precio con descuento
           items: cart.items,
         }),
       });
 
       if (response.ok) {
-        clearCart();  // Limpiar el carrito después de la compra
+        clearCart(); // Limpiar el carrito después de la compra
         navigate("/order-confirmation", { state: { name } });  // Pasamos el nombre al estado de la navegación
       } else {
         alert("Hubo un problema al realizar la compra");
@@ -58,6 +61,11 @@ export default function Checkout() {
 
       <div>
         <p className="mb-2">Total: ${cart.total}</p>
+        {cart.discountPrice && (
+          <p className="text-xl text-red-500">
+            ¡Descuento del 20%! Total con descuento: ${discountPrice}
+          </p>
+        )}
         <button
           onClick={handleCheckout}
           className="mt-4 bg-green-500 px-4 py-2 rounded hover:bg-green-600"
@@ -68,4 +76,3 @@ export default function Checkout() {
     </div>
   );
 }
-
