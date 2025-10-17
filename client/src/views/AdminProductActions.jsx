@@ -72,64 +72,67 @@ export default function AdminProductActions() {
   };
 
   return (
-    <div className="p-6 text-white">
-      <h2 className="text-2xl mb-4">Gestión de productos</h2>
-      <div>
-        <h3>Agregar Producto</h3>
-        <input
-          type="text"
-          placeholder="Nombre"
-          value={newProduct.name}
-          onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
-          className="mb-2"
-        />
-        <input
-          type="text"
-          placeholder="Descripción"
-          value={newProduct.description}
-          onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
-          className="mb-2"
-        />
-        <input
-          type="number"
-          placeholder="Precio"
-          value={newProduct.price}
-          onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
-          className="mb-2"
-        />
-        <input
-          type="number"
-          placeholder="Stock"
-          value={newProduct.stock}
-          onChange={(e) => setNewProduct({ ...newProduct, stock: e.target.value })}
-          className="mb-2"
-        />
-        <input
-          type="number"
-          placeholder="ID Categoría"
-          value={newProduct.categoryId}
-          onChange={(e) => setNewProduct({ ...newProduct, categoryId: e.target.value })}
-          className="mb-2"
-        />
-        <input
-          type="text"
-          placeholder="URL de imagen"
-          value={newProduct.imageUrl}
-          onChange={(e) => setNewProduct({ ...newProduct, imageUrl: e.target.value })}
-          className="mb-2"
-        />
-        <button onClick={handleAddProduct} className="bg-green-500 px-4 py-2 rounded mt-4">
-          Agregar Producto
-        </button>
-      </div>
+  <div className="p-6 text-white">
+    <h2 className="text-2xl mb-2">Gestión de productos</h2>
+    <p className="mb-4 text-yellow-400">Nota: Solo un admin o seller puede realizar estas acciones.</p>
 
-      <div>
-        <h3>Eliminar Producto</h3>
-        <button onClick={() => handleDeleteProduct(1)} className="bg-red-600 px-4 py-2 rounded mt-4">
-          Eliminar Producto (ID 1)
-        </button>
-      </div>
+    <div>
+      <h3>Agregar Producto</h3>
+      <input
+        type="text"
+        placeholder="Nombre"
+        value={newProduct.name}
+        onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+        className="mb-2"
+      />
+      <input
+        type="text"
+        placeholder="Descripción"
+        value={newProduct.description}
+        onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
+        className="mb-2"
+      />
+      <input
+        type="number"
+        placeholder="Precio"
+        value={newProduct.price}
+        onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
+        className="mb-2"
+      />
+      <input
+        type="number"
+        placeholder="Stock"
+        value={newProduct.stock}
+        onChange={(e) => setNewProduct({ ...newProduct, stock: e.target.value })}
+        className="mb-2"
+      />
+      <input
+        type="number"
+        placeholder="ID Categoría"
+        value={newProduct.categoryId}
+        onChange={(e) => setNewProduct({ ...newProduct, categoryId: e.target.value })}
+        className="mb-2"
+      />
+      <input
+        type="text"
+        placeholder="URL de imagen"
+        value={newProduct.imageUrl}
+        onChange={(e) => setNewProduct({ ...newProduct, imageUrl: e.target.value })}
+        className="mb-2"
+      />
+      <button onClick={handleAddProduct} className="bg-green-500 px-4 py-2 rounded mt-4">
+        Agregar Producto
+      </button>
     </div>
-  );
+
+    <div className="mt-6">
+      <h3>Eliminar Producto</h3>
+      <p className="text-yellow-400 mb-2">Nota: Solo un admin o seller puede eliminar productos.</p>
+      <button onClick={() => handleDeleteProduct(1)} className="bg-red-600 px-4 py-2 rounded mt-2">
+        Eliminar Producto (ID 1)
+      </button>
+    </div>
+  </div>
+);
 }
 
