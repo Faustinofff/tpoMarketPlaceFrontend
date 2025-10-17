@@ -10,6 +10,7 @@ import Cart from "./views/Cart.jsx";
 import Checkout from "./views/Checkout.jsx";
 import OrderConfirmation from "./views/OrderConfirmation.jsx";
 import logo from '/logo.png'
+import AdminProductActions from "./views/AdminProductActions";
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/order-confirmation" element={<OrderConfirmation />} />
         <Route path="/producto/:id" element={<ProductDetail />} />
+        <Route path="/admin" element={<AdminProductActions />} />
 
       </Routes>
     </>
