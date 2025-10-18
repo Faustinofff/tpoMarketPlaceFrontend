@@ -15,7 +15,7 @@ export default function AdminProductActions() {
 
   const token = localStorage.getItem("token");
 
-  // Si no hay token, bloquea acceso
+  
   if (!token) {
     return (
       <div className="text-white p-4">
@@ -34,7 +34,7 @@ export default function AdminProductActions() {
     );
   }
 
-  // ➕ Agregar producto
+  
   const handleAddProduct = async () => {
     try {
       const response = await fetch("http://localhost:4002/api/v1/products", {
@@ -65,7 +65,7 @@ export default function AdminProductActions() {
     }
   };
 
-  // 🗑️ Eliminar producto
+  
   const handleDeleteProduct = async () => {
     if (!deleteId.trim()) {
       alert("Por favor, ingresa un ID válido para eliminar.");
@@ -103,7 +103,7 @@ export default function AdminProductActions() {
         Nota: Solo un admin o seller puede realizar estas acciones.
       </p>
 
-      {/* FORMULARIO DE AGREGAR */}
+      
       <div className="mb-10">
         <h3 className="text-lg mb-3 font-semibold">Agregar Producto</h3>
         <div className="grid grid-cols-6 gap-2">
@@ -147,7 +147,7 @@ export default function AdminProductActions() {
         </button>
       </div>
 
-      {/* SECCIÓN ELIMINAR */}
+      
       <div>
         <h3 className="text-lg mb-2 font-semibold">Eliminar Producto</h3>
         <p className="text-yellow-400 mb-3">

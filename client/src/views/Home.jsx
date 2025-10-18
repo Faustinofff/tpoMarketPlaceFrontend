@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <div className="bg-gradient-to-r from-[#000000] via-[#0a0a20] to-[#000033] min-h-screen">
       
-      {/* Hero con imagen */}
+      
       <div className="relative w-full h-[500px]">
         <img
           src="/ip.png"
@@ -12,7 +12,7 @@ export default function Home() {
           className="w-full h-full object-cover"
         />
 
-        {/* Botón futurista centrado a la derecha */}
+        
         <div className="absolute top-1/2 right-1/6 transform -translate-y-1/2">
           <button
             onClick={() => window.location.href = "/productos"}
@@ -28,7 +28,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Lista de productos */}
+      
       <div className="mt-10">
         <ProductList />
       </div>

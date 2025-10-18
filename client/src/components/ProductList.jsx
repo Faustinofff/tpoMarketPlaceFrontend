@@ -33,7 +33,7 @@ const ProductList = ({ mostrarTodos = false }) => {
     );
   }
 
-  // 🔹 Mostrar todos o solo 4 destacados
+  
   const lista = mostrarTodos ? productos : productos.slice(0, 6);
 
   return (
@@ -43,7 +43,7 @@ const ProductList = ({ mostrarTodos = false }) => {
           {mostrarTodos ? "Catálogo Completo" : "Productos Destacados"}
         </h2>
 
-        {/* 🧱 GRID RESPONSIVO AJUSTADO */}
+        
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12 justify-items-center">
           {lista.map((producto) => (
             <div key={producto.id} className="flex justify-center">

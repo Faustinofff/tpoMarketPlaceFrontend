@@ -6,10 +6,10 @@ const Login = () => {
   const [error, setError] = useState("");
   const [token, setToken] = useState(null);
 
-  // Verifica si ya hay un token en localStorage al cargar el componente
+  
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
-    console.log("Token recuperado de localStorage al cargar el componente:", storedToken); // Verifica si el token está en localStorage
+    console.log("Token recuperado de localStorage al cargar el componente:", storedToken); 
     if (storedToken) {
       setToken(storedToken);
     }
@@ -17,7 +17,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");  // Limpiar el error antes de hacer la solicitud
+    setError(""); 
 
     try {
       const response = await fetch("http://localhost:4002/api/v1/auth/authenticate", {
@@ -29,32 +29,32 @@ const Login = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Credenciales incorrectas");  // Si la respuesta no es ok, lanzar un error
+        throw new Error("Credenciales incorrectas");  
       }
 
       const data = await response.json();
-      console.log("Datos recibidos del backend:", data);  // Verifica los datos que recibes del backend
-      localStorage.setItem("token", data.access_token);  // Guardar el token en localStorage
-      setToken(data.access_token);  // Establecer el token en el estado
+      console.log("Datos recibidos del backend:", data);  
+      localStorage.setItem("token", data.access_token);  
+      setToken(data.access_token); 
 
       alert("Inicio de sesión exitoso ✅");
-      window.location.href = "/home";  // Redirigir al home
+      window.location.href = "/home";  
     } catch (err) {
-      setError(err.message);  // Mostrar el error si ocurre
-      console.error("Error al hacer login:", err);  // Log del error
+      setError(err.message);  
+      console.error("Error al hacer login:", err);  
     }
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");  // Eliminar el token de localStorage
-    setToken(null);  // Limpiar el token en el estado
+    localStorage.removeItem("token");  
+    setToken(null);  
     alert("Sesión cerrada correctamente 👋");
-    window.location.href = "/login";  // Redirigir a la página de login
+    window.location.href = "/login";  
   };
 
-  // Si ya existe un token, mostrar un mensaje y permitir cerrar sesión
+  
   if (token) {
-    console.log("Token actual en el estado:", token);  // Verifica el token en el estado
+    console.log("Token actual en el estado:", token);  
     return (
       <div className="bg-gradient-to-r from-[#000000] via-[#0a0a20] to-[#000033] min-h-screen flex flex-col justify-center items-center">
         <h2 className="text-3xl font-bold mb-8" style={{ color: "#ffffff" }}>
@@ -70,7 +70,7 @@ const Login = () => {
     );
   }
 
-  // Si no hay token, mostrar el formulario de login
+  
   return (
     <div className="bg-gradient-to-r from-[#000000] via-[#0a0a20] to-[#000033] min-h-screen flex flex-col justify-center items-center">
       <h2 className="text-3xl font-bold text-white mb-8">Iniciar Sesión</h2>

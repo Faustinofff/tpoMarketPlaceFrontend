@@ -50,7 +50,7 @@ const ProductsView = () => {
           Catálogo Completo
         </h1>
 
-        {/* 🔍 Barra de búsqueda */}
+        
         <div className="flex justify-center mb-10">
           <input
             type="text"
@@ -61,7 +61,7 @@ const ProductsView = () => {
           />
         </div>
 
-        {/* 🛒 Lista de productos */}
+        
         {filteredProducts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center">
             {filteredProducts.map((producto) => (

@@ -7,10 +7,10 @@ export default function Checkout() {
   const [name, setName] = useState(""); 
   const navigate = useNavigate();
 
-  // Obtener token del almacenamiento local
+  
   const token = localStorage.getItem("token");
 
-  // Usar el precio con descuento solo si realmente existe y aplica
+  
   const hasDiscount = cart.discountPrice && cart.discountPrice < cart.total;
   const finalPrice = hasDiscount ? cart.discountPrice : cart.total;
 

@@ -6,7 +6,7 @@ export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState(null);
   const token = localStorage.getItem("token");
 
-  // 📦 Obtener el carrito del usuario autenticado
+  
   const fetchCart = async () => {
     try {
       const res = await fetch("http://localhost:4002/api/v1/cart", {
@@ -20,7 +20,7 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // ➕ Agregar producto al carrito
+  
   const addToCart = async (productId, quantity = 1) => {
     try {
       const res = await fetch(
@@ -37,7 +37,7 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // ❌ Eliminar producto
+  
   const removeFromCart = async (productId) => {
     try {
       const res = await fetch(
@@ -54,7 +54,7 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // 🧹 Vaciar carrito
+  
   const clearCart = async () => {
     try {
       await fetch("http://localhost:4002/api/v1/cart/clear", {

@@ -27,7 +27,7 @@ export default function Navigation() {
     >
       <h1 className="text-2xl font-bold text-white">ElectroShop</h1>
 
-      {/* 🔍 Barra de búsqueda */}
+      
       <form onSubmit={handleSearch} className="flex items-center gap-2">
         <input
           type="text"

@@ -10,17 +10,17 @@ export default function Cart() {
   if (cart.items.length === 0)
     return <h2 className="text-white p-4">🛒 Tu carrito está vacío</h2>;
 
-  // Calcular cantidad total de productos
+  
   const totalItems = cart.items.reduce((acc, item) => acc + item.quantity, 0);
 
-  // Verifica si el carrito es elegible para descuento
+  
   const discountEligible = totalItems >= 3;
 
-  // Calcular totales
+  
   const totalPrice = cart.total;
   const discountPrice = totalPrice * 0.8;
 
-  // 🔧 Solo guardamos el descuento si aplica
+  
   if (discountEligible) {
     cart.discountPrice = discountPrice;
   } else {
@@ -43,7 +43,7 @@ export default function Cart() {
               <p>Precio: ${item.product.price}</p>
             </div>
 
-            {/* Botón eliminar */}
+            
             <button
               onClick={() => removeFromCart(item.product.id)}
               className="bg-gradient-to-r from-[#000033] via-[#1e3fff] to-[#00ffff]
@@ -66,7 +66,7 @@ export default function Cart() {
         </p>
       )}
 
-      {/* Botones inferiores */}
+      
       <div className="flex flex-wrap gap-4 mt-8">
         <button
           onClick={() => clearCart()}

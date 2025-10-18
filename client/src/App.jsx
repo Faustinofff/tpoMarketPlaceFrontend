@@ -15,10 +15,10 @@ import Footer from "./views/Footer";
 function App() {
   return (
     <div className="flex flex-col min-h-screen bg-black">
-      {/* 🧭 Barra de navegación */}
+      
       <Navigation />
 
-      {/* 📄 Contenido principal */}
+      
       <div className="flex-grow">
         <Routes>
           <Route path="/" element={<Home />} />

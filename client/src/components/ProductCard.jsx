@@ -7,9 +7,9 @@ const ProductCard = ({ id, nombre, precio, imagenUrl }) => {
     <Link
       to={`/producto/${id}`}
       className="bg-[#0a0a20] rounded-2xl border border-gray-700 shadow-md hover:scale-105 transition-transform flex flex-col overflow-hidden w-[260px] h-[420px] no-underline"
-      style={{ color: "white", textDecoration: "none" }} // fuerza el color blanco
+      style={{ color: "white", textDecoration: "none" }} 
     >
-      {/* Imagen cuadrada */}
+      
       <div className="w-full aspect-square overflow-hidden">
         <img
           src={imagenUrl}
@@ -18,7 +18,7 @@ const ProductCard = ({ id, nombre, precio, imagenUrl }) => {
         />
       </div>
 
-      {/* Contenido */}
+      
       <div className="p-3 flex-1 flex flex-col justify-center gap-1">
         <h3
           style={{

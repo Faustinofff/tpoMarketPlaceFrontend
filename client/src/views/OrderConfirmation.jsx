@@ -4,7 +4,7 @@ export default function OrderConfirmation() {
   const location = useLocation();
   const navigate = useNavigate();
   
-  // Obtener el nombre del cliente desde el estado de la navegación
+  
   const { name } = location.state || { name: "Cliente" };
 
   return (
