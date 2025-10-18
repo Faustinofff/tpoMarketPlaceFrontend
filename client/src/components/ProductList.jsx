@@ -34,7 +34,7 @@ const ProductList = ({ mostrarTodos = false }) => {
   }
 
   // 🔹 Mostrar todos o solo 4 destacados
-  const lista = mostrarTodos ? productos : productos.slice(0, 4);
+  const lista = mostrarTodos ? productos : productos.slice(0, 6);
 
   return (
     <section className="bg-gradient-to-r from-[#000000] via-[#0a0a20] to-[#000033] py-16">
