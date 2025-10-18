@@ -34,36 +34,36 @@ export default function ProductDetail() {
   const imageUrl = product.imageUrl || "/placeholder.png";
 
   return (
-    <div className="max-w-4xl mx-auto p-8 bg-[#0a0a20] rounded-xl shadow-lg">
-      <img
-        src={imageUrl}
-        alt={product.name}
-        className="w-[300px] h-[300px] object-cover rounded mx-auto" 
-      />
-      <h1 className="text-4xl font-bold mt-4 text-white">{product.name}</h1>
-      <p className="text-2xl text-gray-300 mt-2">${precioFormateado}</p>
-      <p className="mt-4 text-gray-400">{product.description}</p>
+    <div className="max-w-4xl mx-auto p-8 bg-[#0a0a20] rounded-xl shadow-lg text-white mt-10">
+      <div className="flex flex-col items-center text-center">
+        <img
+          src={imageUrl}
+          alt={product.name}
+          className="w-[300px] h-[300px] object-cover rounded mb-6"
+        />
+        <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
+        <p className="text-xl mb-4">${precioFormateado}</p>
+        <p className="text-gray-400 mb-8">{product.description}</p>
 
-      {/* Botón dentro del detalle */}
-      {sinStock ? (
-        <button
-          className="mt-6 w-full bg-red-600 text-white py-2 rounded-md cursor-not-allowed"
-          disabled
-        >
-          AGOTADO
-        </button>
-      ) : (
-        <button
-          className="bg-gradient-to-r from-[#000033] via-[#1e3fff] to-[#00ffff]
-                        text-white font-extrabold 
-                        text-8xl h-[50px] w-[200px]
-                        rounded-full shadow-2xl 
-                        hover:scale-110 transition-transform duration-300 flex items-center justify-center whitespace-nowrap"
-          onClick={() => addToCart(product.id)}
-        >
-          Agregar al carrito
-        </button>
-      )}
+        {sinStock ? (
+          <button
+            className="bg-red-600 text-white py-3 px-8 rounded-full font-bold cursor-not-allowed opacity-70"
+            disabled
+          >
+            AGOTADO
+          </button>
+        ) : (
+          <button
+            onClick={() => addToCart(product.id)}
+            className="bg-gradient-to-r from-[#000033] via-[#1e3fff] to-[#00ffff]
+                       text-white font-bold text-base
+                       px-8 py-3 rounded-full shadow-lg
+                       hover:scale-105 transition-transform duration-300"
+          >
+            Agregar al carrito
+          </button>
+        )}
+      </div>
     </div>
   );
 }

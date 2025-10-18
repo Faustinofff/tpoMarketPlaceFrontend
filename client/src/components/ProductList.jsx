@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
 
-const ProductList = () => {
+const ProductList = ({ mostrarTodos = false }) => {
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
   const URL_API = "http://localhost:4002/api/v1/products";
@@ -33,20 +33,20 @@ const ProductList = () => {
     );
   }
 
+  // 🔹 Mostrar todos o solo 4 destacados
+  const lista = mostrarTodos ? productos : productos.slice(0, 4);
+
   return (
     <section className="bg-gradient-to-r from-[#000000] via-[#0a0a20] to-[#000033] py-16">
-      <div className="w-full max-w-7xl mx-auto px-8 pb-16">
+      <div className="w-full px-10 pb-16">
         <h2 className="text-3xl font-bold text-white mb-10 text-center">
-          Productos Destacados
+          {mostrarTodos ? "Catálogo Completo" : "Productos Destacados"}
         </h2>
 
-        {/* CONTENEDOR FLEX QUE GARANTIZA ESPACIOS */}
-        <div className="flex justify-between items-start">
-          {productos.slice(0, 4).map((producto) => (
-            <div
-              key={producto.id}
-              className="w-[260px]" // ancho fijo
-            >
+        {/* 🧱 GRID RESPONSIVO AJUSTADO */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12 justify-items-center">
+          {lista.map((producto) => (
+            <div key={producto.id} className="flex justify-center">
               <ProductCard
                 id={producto.id}
                 nombre={producto.name}
@@ -63,3 +63,4 @@ const ProductList = () => {
 };
 
 export default ProductList;
+

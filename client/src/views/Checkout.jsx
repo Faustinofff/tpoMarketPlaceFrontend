@@ -4,15 +4,14 @@ import { useNavigate } from "react-router-dom";
 
 export default function Checkout() {
   const { cart, clearCart } = useContext(CartContext);
-  const [name, setName] = useState(""); // Estado para el nombre del cliente
-  const navigate = useNavigate(); // Para redirigir después del checkout
+  const [name, setName] = useState(""); 
+  const navigate = useNavigate();
 
   // Obtener token del almacenamiento local
   const token = localStorage.getItem("token");
 
   // Usar el precio con descuento solo si realmente existe y aplica
-  const hasDiscount =
-    cart.discountPrice && cart.discountPrice < cart.total;
+  const hasDiscount = cart.discountPrice && cart.discountPrice < cart.total;
   const finalPrice = hasDiscount ? cart.discountPrice : cart.total;
 
   const handleCheckout = async () => {
@@ -42,7 +41,7 @@ export default function Checkout() {
       });
 
       if (response.ok) {
-        clearCart(); // Limpiar carrito tras la compra
+        clearCart(); 
         navigate("/order-confirmation", { state: { name } });
       } else {
         alert("Hubo un problema al realizar la compra.");
@@ -54,39 +53,39 @@ export default function Checkout() {
 
   return (
     <div className="p-6 text-white">
-      <h2 className="text-2xl mb-4">Finalizar compra</h2>
+      <h2 className="text-2xl mb-6 font-semibold">🧾 Finalizar compra</h2>
 
-      <div>
-        <label className="block mb-2">Nombre completo:</label>
+      <div className="mb-6">
+        <label className="block mb-2 text-lg font-medium">Nombre completo:</label>
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="px-4 py-2 mb-4 bg-gray-700 rounded w-full"
+          className="px-4 py-2 bg-gray-700 rounded w-full focus:outline-none focus:ring-2 focus:ring-[#00ffff]"
           placeholder="Ingresa tu nombre"
         />
       </div>
 
-      <div>
-        <p className="mb-2 text-lg">Total: ${cart.total}</p>
+      <div className="mb-6">
+        <p className="text-lg mb-2">Total: ${cart.total}</p>
 
         {hasDiscount && (
-          <p className="text-xl text-red-500 mb-4">
+          <p className="text-lg text-red-500">
             ¡Descuento del 20%! Total con descuento: ${finalPrice}
           </p>
         )}
-
-        <button
-          onClick={handleCheckout}
-          className="bg-gradient-to-r from-[#000033] via-[#1e3fff] to-[#00ffff]
-                    text-white font-extrabold 
-                    text-8xl h-[50px] w-[200px]
-                    rounded-full shadow-2xl 
-                    hover:scale-110 transition-transform duration-300 flex items-center justify-center whitespace-nowrap"
-        >
-          Finalizar compra
-        </button>
       </div>
+
+      <button
+        onClick={handleCheckout}
+        className="bg-gradient-to-r from-[#000033] via-[#1e3fff] to-[#00ffff]
+                   text-white font-bold text-base
+                   px-8 py-3 rounded-full shadow-lg
+                   hover:scale-105 transition-transform duration-300
+                   flex items-center justify-center"
+      >
+        Finalizar compra
+      </button>
     </div>
   );
 }

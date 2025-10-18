@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function AdminProductActions() {
@@ -11,128 +11,169 @@ export default function AdminProductActions() {
     categoryId: "",
     imageUrl: "",
   });
+  const [deleteId, setDeleteId] = useState("");
 
-  const token = localStorage.getItem("token"); // Obtenemos el token desde localStorage directamente
+  const token = localStorage.getItem("token");
 
-  // Verificar si el token existe
+  // Si no hay token, bloquea acceso
   if (!token) {
     return (
       <div className="text-white p-4">
-        <h2>No tienes permisos para acceder a esta sección. Inicia sesión primero.</h2>
-        <button onClick={() => navigate("/login")} className="bg-blue-600 text-white px-4 py-2 rounded">
+        <h2 className="text-xl mb-4">
+          No tienes permisos para acceder a esta sección. Inicia sesión primero.
+        </h2>
+        <button
+          onClick={() => navigate("/login")}
+          className="bg-gradient-to-r from-[#000033] via-[#1e3fff] to-[#00ffff] 
+                     text-white font-bold px-6 py-2 rounded-full shadow-lg
+                     hover:scale-105 transition-transform duration-300"
+        >
           Ir al login
         </button>
       </div>
     );
   }
 
-  // Agregar producto
+  // ➕ Agregar producto
   const handleAddProduct = async () => {
     try {
       const response = await fetch("http://localhost:4002/api/v1/products", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`, // Pasamos el token en la cabecera
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(newProduct),
       });
 
       if (response.ok) {
-        alert("Producto agregado con éxito");
+        alert("✅ Producto agregado con éxito");
+        setNewProduct({
+          name: "",
+          description: "",
+          price: "",
+          stock: "",
+          categoryId: "",
+          imageUrl: "",
+        });
       } else {
-        alert("Hubo un problema al agregar el producto");
+        alert("⚠️ Hubo un problema al agregar el producto");
       }
     } catch (error) {
-      alert("Error al conectar con el servidor");
+      alert("❌ Error al conectar con el servidor");
       console.error(error);
     }
   };
 
-  // Eliminar producto
-  const handleDeleteProduct = async (productId) => {
+  // 🗑️ Eliminar producto
+  const handleDeleteProduct = async () => {
+    if (!deleteId.trim()) {
+      alert("Por favor, ingresa un ID válido para eliminar.");
+      return;
+    }
+
     try {
-      const response = await fetch(`http://localhost:4002/api/v1/products/${productId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`, // Pasamos el token en la cabecera
-        },
-      });
+      const response = await fetch(
+        `http://localhost:4002/api/v1/products/${deleteId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (response.ok) {
-        alert("Producto eliminado con éxito");
+        alert(`🗑️ Producto con ID ${deleteId} eliminado con éxito`);
+        setDeleteId("");
       } else {
-        alert("Hubo un problema al eliminar el producto");
+        alert("⚠️ Hubo un problema al eliminar el producto");
       }
     } catch (error) {
-      alert("Error al conectar con el servidor");
+      alert("❌ Error al conectar con el servidor");
       console.error(error);
     }
   };
 
   return (
-  <div className="p-6 text-white">
-    <h2 className="text-2xl mb-2">Gestión de productos</h2>
-    <p className="mb-4 text-yellow-400">Nota: Solo un admin o seller puede realizar estas acciones.</p>
+    <div className="p-8 text-white">
+      <h2 className="text-3xl mb-2 font-bold">Gestión de productos</h2>
+      <p className="mb-6 text-yellow-400">
+        Nota: Solo un admin o seller puede realizar estas acciones.
+      </p>
 
-    <div>
-      <h3>Agregar Producto</h3>
-      <input
-        type="text"
-        placeholder="Nombre"
-        value={newProduct.name}
-        onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
-        className="mb-2"
-      />
-      <input
-        type="text"
-        placeholder="Descripción"
-        value={newProduct.description}
-        onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
-        className="mb-2"
-      />
-      <input
-        type="number"
-        placeholder="Precio"
-        value={newProduct.price}
-        onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
-        className="mb-2"
-      />
-      <input
-        type="number"
-        placeholder="Stock"
-        value={newProduct.stock}
-        onChange={(e) => setNewProduct({ ...newProduct, stock: e.target.value })}
-        className="mb-2"
-      />
-      <input
-        type="number"
-        placeholder="ID Categoría"
-        value={newProduct.categoryId}
-        onChange={(e) => setNewProduct({ ...newProduct, categoryId: e.target.value })}
-        className="mb-2"
-      />
-      <input
-        type="text"
-        placeholder="URL de imagen"
-        value={newProduct.imageUrl}
-        onChange={(e) => setNewProduct({ ...newProduct, imageUrl: e.target.value })}
-        className="mb-2"
-      />
-      <button onClick={handleAddProduct} className="bg-green-500 px-4 py-2 rounded mt-4">
-        Agregar Producto
-      </button>
-    </div>
+      {/* FORMULARIO DE AGREGAR */}
+      <div className="mb-10">
+        <h3 className="text-lg mb-3 font-semibold">Agregar Producto</h3>
+        <div className="grid grid-cols-6 gap-2">
+          {["name", "description", "price", "stock", "categoryId", "imageUrl"].map(
+            (field, index) => (
+              <input
+                key={index}
+                type={field === "price" || field === "stock" || field === "categoryId" ? "number" : "text"}
+                placeholder={
+                  field === "name"
+                    ? "Nombre"
+                    : field === "description"
+                    ? "Descripción"
+                    : field === "price"
+                    ? "Precio"
+                    : field === "stock"
+                    ? "Stock"
+                    : field === "categoryId"
+                    ? "ID Categoría"
+                    : "URL de imagen"
+                }
+                value={newProduct[field]}
+                onChange={(e) =>
+                  setNewProduct({ ...newProduct, [field]: e.target.value })
+                }
+                className="p-2 bg-gray-800 border border-gray-600 rounded text-white
+                           placeholder-gray-400 focus:outline-none focus:ring-2
+                           focus:ring-cyan-400"
+              />
+            )
+          )}
+        </div>
 
-    <div className="mt-6">
-      <h3>Eliminar Producto</h3>
-      <p className="text-yellow-400 mb-2">Nota: Solo un admin o seller puede eliminar productos.</p>
-      <button onClick={() => handleDeleteProduct(1)} className="bg-red-600 px-4 py-2 rounded mt-2">
-        Eliminar Producto (ID 1)
-      </button>
+        <button
+          onClick={handleAddProduct}
+          className="mt-6 bg-gradient-to-r from-[#000033] via-[#1e3fff] to-[#00ffff]
+                     text-white font-bold px-8 py-2 rounded-full shadow-lg
+                     hover:scale-105 transition-transform duration-300"
+        >
+          Agregar Producto
+        </button>
+      </div>
+
+      {/* SECCIÓN ELIMINAR */}
+      <div>
+        <h3 className="text-lg mb-2 font-semibold">Eliminar Producto</h3>
+        <p className="text-yellow-400 mb-3">
+          Nota: Solo un admin o seller puede eliminar productos.
+        </p>
+
+        <div className="flex items-center gap-3">
+          <input
+            type="number"
+            placeholder="ID del producto"
+            value={deleteId}
+            onChange={(e) => setDeleteId(e.target.value)}
+            className="p-2 bg-gray-800 border border-gray-600 rounded text-white
+                       placeholder-gray-400 focus:outline-none focus:ring-2
+                       focus:ring-red-500 w-40"
+          />
+          <button
+            onClick={handleDeleteProduct}
+            className="bg-gradient-to-r from-red-700 via-red-500 to-pink-500
+                       text-white font-bold px-6 py-2 rounded-full shadow-lg
+                       hover:scale-105 transition-transform duration-300"
+          >
+            Eliminar Producto
+          </button>
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
 }
-
