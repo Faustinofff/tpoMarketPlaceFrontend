@@ -5,7 +5,7 @@ export default function Home() {
     <div className="bg-gradient-to-r from-[#000000] via-[#0a0a20] to-[#000033] min-h-screen">
       
       {/* Imagen principal un poco más abajo */}
-      <div className="relative w-full h-[500px] mt-8">
+      <div className="relative w-full h-[600px] mt-1">
         <img
           src="/ip.png"
           alt="Imagen futurista gamer"
