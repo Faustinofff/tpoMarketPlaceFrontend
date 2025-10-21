@@ -4,13 +4,11 @@ import { useNavigate } from "react-router-dom";
 
 export default function Checkout() {
   const { cart, clearCart } = useContext(CartContext);
-  const [name, setName] = useState(""); 
+  const [name, setName] = useState("");
   const navigate = useNavigate();
 
-  
   const token = localStorage.getItem("token");
 
-  
   const hasDiscount = cart.discountPrice && cart.discountPrice < cart.total;
   const finalPrice = hasDiscount ? cart.discountPrice : cart.total;
 
@@ -27,26 +25,27 @@ export default function Checkout() {
     }
 
     try {
-      const response = await fetch("http://localhost:4002/api/v1/cart/checkout", {
+      // 🔹 Endpoint correcto del backend (no el del carrito)
+      const response = await fetch("http://localhost:4002/api/v1/orders/checkout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          name,
-          total: finalPrice,
-          items: cart.items,
-        }),
+        // 🔹 Enviamos solo lo que el backend necesita
+        body: JSON.stringify({ name }),
       });
 
       if (response.ok) {
-        clearCart(); 
+        clearCart();
         navigate("/order-confirmation", { state: { name } });
       } else {
+        const errorText = await response.text();
+        console.error("Error del backend:", errorText);
         alert("Hubo un problema al realizar la compra.");
       }
     } catch (error) {
+      console.error("Error de conexión:", error);
       alert("Error de conexión. Intenta nuevamente.");
     }
   };
