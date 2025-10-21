@@ -25,14 +25,14 @@ export default function Checkout() {
     }
 
     try {
-      // 🔹 Endpoint correcto del backend (no el del carrito)
+      
       const response = await fetch("http://localhost:4002/api/v1/orders/checkout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        // 🔹 Enviamos solo lo que el backend necesita
+        
         body: JSON.stringify({ name }),
       });
 

@@ -3,11 +3,11 @@ import { createContext, useState, useEffect } from "react";
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  // 🔹 Evitamos null: inicializamos con estructura vacía
+  
   const [cart, setCart] = useState({ items: [], total: 0 });
   const token = localStorage.getItem("token");
 
-  // 🧠 Fetch del carrito
+  
   const fetchCart = async () => {
     if (!token) return;
 
@@ -16,14 +16,14 @@ export const CartProvider = ({ children }) => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      // 🔹 Si la respuesta no es 200, mostramos el error pero no rompemos la app
+      
       if (!res.ok) {
         const errorText = await res.text();
         console.error("Error al obtener el carrito:", errorText);
         return;
       }
 
-      // 🔹 Intentamos parsear el JSON y evitamos crash si no lo es
+      
       let data;
       try {
         data = await res.json();
@@ -32,7 +32,7 @@ export const CartProvider = ({ children }) => {
         return;
       }
 
-      // 🔹 Si data no tiene items, lo normalizamos
+      
       if (!data || !data.items) {
         data = { items: [], total: 0 };
       }
@@ -43,7 +43,7 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // ➕ Agregar producto
+  
   const addToCart = async (productId, quantity = 1) => {
     try {
       const res = await fetch(
@@ -66,7 +66,7 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // ❌ Eliminar producto
+  
   const removeFromCart = async (productId) => {
     try {
       const res = await fetch(
@@ -89,7 +89,7 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // 🧹 Vaciar carrito
+  
   const clearCart = async () => {
     try {
       await fetch("http://localhost:4002/api/v1/cart/clear", {
@@ -102,7 +102,7 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // 🔄 Cargar carrito al iniciar
+  
   useEffect(() => {
     if (token) fetchCart();
   }, [token]);

@@ -41,7 +41,7 @@ export default function AdminProductActions() {
     );
   }
 
-  // ➕ Agregar producto
+  
   const handleAddProduct = async () => {
     try {
       const response = await fetch("http://localhost:4002/api/v1/products", {
@@ -72,7 +72,7 @@ export default function AdminProductActions() {
     }
   };
 
-  // 🗑️ Eliminar producto
+  
   const handleDeleteProduct = async () => {
     if (!deleteId.trim()) {
       alert("Por favor, ingresa un ID válido para eliminar.");
@@ -103,7 +103,7 @@ export default function AdminProductActions() {
     }
   };
 
-  // ✏️ Modificar producto
+  
   const handleEditProduct = async () => {
     if (!editId.trim()) {
       alert("Por favor, ingresa el ID del producto a modificar.");
@@ -156,7 +156,7 @@ export default function AdminProductActions() {
         Nota: Solo un admin o seller puede realizar estas acciones.
       </p>
 
-      {/* ➕ Agregar producto */}
+      
       <div className="mb-10">
         <h3 className="text-lg mb-3 font-semibold">Agregar Producto</h3>
         <div className="grid grid-cols-6 gap-2">
@@ -206,7 +206,7 @@ export default function AdminProductActions() {
         </button>
       </div>
 
-      {/* 🗑️ Eliminar producto */}
+      
       <div className="mb-10">
         <h3 className="text-lg mb-2 font-semibold">Eliminar Producto</h3>
         <p className="text-yellow-400 mb-3">
@@ -234,7 +234,7 @@ export default function AdminProductActions() {
         </div>
       </div>
 
-      {/* ✏️ Modificar producto */}
+      
       <div>
         <h3 className="text-lg mb-2 font-semibold">Modificar Producto</h3>
         <p className="text-yellow-400 mb-3">
