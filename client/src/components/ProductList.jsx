@@ -1,40 +1,25 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
+import { useDispatch, useSelector } from "react-redux";
+
 
 const ProductList = ({ mostrarTodos = false }) => {
-  const [productos, setProductos] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const URL_API = "http://localhost:4002/api/v1/products";
+  const dispatch = useDispatch();
+  const { items, error, loading } = useSelector((state) => state.products);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch(URL_API);
-        if (!response.ok) {
-          throw new Error(`Error HTTP: ${response.status}`);
-        }
-        const data = await response.json();
-        setProductos(data);
-      } catch (error) {
-        console.error("Error al obtener los productos:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProducts();
-  }, []);
-
+    dispatch(fetchProducts());
+  }, [dispatch]);
   if (loading) {
+    return <div className="text-white text-center">Cargando productos...</div>;
+  }
+  if (error) {
     return (
-      <div className="p-4 w-full">
-        <p className="text-white text-center py-10">Cargando productos...</p>
-      </div>
+      <div className="text-red-500 text-center">Error: {error}</div>
     );
   }
-
   
-  const lista = mostrarTodos ? productos : productos.slice(0, 6);
+  
 
   return (
     <section className="bg-gradient-to-r from-[#000000] via-[#0a0a20] to-[#000033] py-16">
