@@ -1,25 +1,25 @@
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useEffect, useState, useContext } from "react";
-import { CartContext } from "../context/CartContext";
-import { toast } from "react-toastify";  // Asegúrate de importar toast
+import { useDispatch } from "react-redux";
+import { addToCart } from "../redux/cartSlice"; // Accede a la acción de agregar al carrito
+import { toast } from "react-toastify"; // Muestra notificaciones
 
 export default function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const { addToCart } = useContext(CartContext);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchProduct = async () => {
       setLoading(true);
       try {
         const res = await fetch(`http://localhost:4002/api/v1/products/${id}`);
-        if (!res.ok) throw new Error(`Producto no encontrado (HTTP ${res.status})`);
+        if (!res.ok) throw new Error("Producto no encontrado");
         const data = await res.json();
         setProduct(data);
       } catch (err) {
-        setError(err.message);
+        console.error("Error al obtener el producto:", err);
       } finally {
         setLoading(false);
       }
@@ -27,19 +27,9 @@ export default function ProductDetail() {
     fetchProduct();
   }, [id]);
 
-  if (loading) return <p className="text-white text-center mt-10">Cargando producto...</p>;
-  if (error) return <p className="text-red-500 text-center mt-10">{error}</p>;
-
-  const precioFormateado = product.price ? Number(product.price).toLocaleString("es-AR") : "N/A";
-  const sinStock = product.stock === 0;
-  const imageUrl = product.imageUrl || "/placeholder.png";
-
-  // Función para manejar el evento de agregar al carrito
   const handleAddToCart = () => {
-    addToCart(product.id);  // Llama a la función de agregar al carrito
-
-    // Muestra el toast de notificación
-    toast.success("Producto agregado al carrito!", {
+    dispatch(addToCart({ product, quantity: 1 }));
+    toast.success("Producto agregado al carrito", {
       position: "top-right",
       autoClose: 3000,
       hideProgressBar: false,
@@ -49,6 +39,12 @@ export default function ProductDetail() {
       progress: undefined,
     });
   };
+
+  if (loading) return <p className="text-white">Cargando producto...</p>;
+  if (!product) return <p className="text-red-500">Producto no encontrado</p>;
+
+  const precioFormateado = product.price ? Number(product.price).toLocaleString("es-AR") : "N/A";
+  const imageUrl = product.imageUrl || "/placeholder.png"; // Si no hay imagen, mostrar la de reemplazo
 
   return (
     <div className="max-w-4xl mx-auto p-8 bg-[#0a0a20] rounded-xl shadow-lg text-white mt-10">
@@ -62,24 +58,14 @@ export default function ProductDetail() {
         <p className="text-xl mb-4">${precioFormateado}</p>
         <p className="text-gray-400 mb-8">{product.description}</p>
 
-        {sinStock ? (
-          <button
-            className="bg-red-600 text-white py-3 px-8 rounded-full font-bold cursor-not-allowed opacity-70"
-            disabled
-          >
-            AGOTADO
-          </button>
-        ) : (
-          <button
-            onClick={handleAddToCart}  // Llama a la función con el toast
-            className="bg-gradient-to-r from-[#000033] via-[#1e3fff] to-[#00ffff]
-                       text-white font-bold text-base
-                       px-8 py-3 rounded-full shadow-lg
-                       hover:scale-105 transition-transform duration-300"
-          >
-            Agregar al carrito
-          </button>
-        )}
+        <button
+          onClick={handleAddToCart}  // Llama a la función con el toast
+          className="bg-gradient-to-r from-[#000033] via-[#1e3fff] to-[#00ffff]
+                     text-white font-bold text-base px-8 py-3 rounded-full shadow-lg
+                     hover:scale-105 transition-transform duration-300"
+        >
+          Agregar al carrito
+        </button>
       </div>
     </div>
   );
