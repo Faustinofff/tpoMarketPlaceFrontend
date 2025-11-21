@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
+import LatestProducts from "../components/LatestProducts";  // Asegúrate de importar LatestProducts
 
 const ProductsView = () => {
   const [productos, setProductos] = useState([]);
@@ -12,14 +12,6 @@ const ProductsView = () => {
   const URL_API = "http://localhost:4002/api/v1/products";
   const URL_CATEGORIAS = "http://localhost:4002/api/v1/categories";
 
-  const location = useLocation();
-  const queryParam = new URLSearchParams(location.search).get("query") || "";
-
-  useEffect(() => {
-    if (queryParam) setSearch(queryParam);
-  }, [queryParam]);
-
-  // 🔹 Cargar productos y categorías al iniciar
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -35,7 +27,7 @@ const ProductsView = () => {
         const dataCat = await resCat.json();
 
         setProductos(dataProd);
-        setCategorias(dataCat.content || dataCat); // soporta paginación o lista directa
+        setCategorias(dataCat.content || dataCat); // Soporta paginación o lista directa
       } catch (error) {
         console.error("Error al obtener productos o categorías:", error);
       } finally {
@@ -46,7 +38,6 @@ const ProductsView = () => {
     fetchData();
   }, []);
 
-  
   const filteredProducts = productos.filter((producto) => {
     const matchSearch = producto.name
       .toLowerCase()
@@ -73,7 +64,7 @@ const ProductsView = () => {
           Catálogo Completo
         </h1>
 
-        
+        {/* Barra de búsqueda */}
         <div className="flex justify-center mb-10">
           <input
             type="text"
@@ -84,7 +75,15 @@ const ProductsView = () => {
           />
         </div>
 
-        
+        {/* Sección de Últimos Productos */}
+        <div className="mb-16">
+          <h2 className="text-3xl font-bold text-white text-center mb-8">
+            ¡Últimos Productos!
+          </h2>
+          <LatestProducts /> {/* Aquí estamos usando el componente LatestProducts */}
+        </div>
+
+        {/* Filtro por categorías */}
         <div className="flex flex-wrap justify-center gap-3 mb-10">
           {categorias.map((cat) => (
             <button
@@ -105,7 +104,7 @@ const ProductsView = () => {
           ))}
         </div>
 
-        
+        {/* Mostrar productos filtrados */}
         {filteredProducts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center">
             {filteredProducts.map((producto) => (
