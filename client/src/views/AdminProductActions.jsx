@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { createProduct, updateProduct, deleteProduct } from "../redux/productSlice"; // Importar las acciones
+import { toast } from "react-toastify";  // Importar react-toastify
 
 export default function AdminProductActions() {
     const dispatch = useDispatch();
@@ -21,8 +22,6 @@ export default function AdminProductActions() {
         imageUrl: "",
         categoryId: "",
     });
-    const [products, setProducts] = useState([]); // Estado para los productos cargados
-    const [search, setSearch] = useState(""); // Estado para la búsqueda
 
     // ** Agregar un producto **
     const handleAddProduct = () => {
@@ -35,22 +34,24 @@ export default function AdminProductActions() {
             categoryId: "",
             imageUrl: "",
         });
+        toast.success("Producto agregado con éxito!");  // Toast de éxito
     };
 
     // ** Eliminar un producto **
     const handleDeleteProduct = () => {
         if (!deleteId.trim()) {
-            alert("Por favor, ingresa un ID válido para eliminar.");
+            toast.error("Por favor, ingresa un ID válido para eliminar.");  // Toast de error
             return;
         }
         dispatch(deleteProduct(deleteId)); // Usamos el dispatch de Redux para eliminar un producto
         setDeleteId("");
+        toast.success(`Producto con ID ${deleteId} eliminado con éxito`);  // Toast de éxito
     };
 
     // ** Modificar un producto **
     const handleEditProduct = () => {
         if (!editId.trim()) {
-            alert("Por favor, ingresa el ID del producto a modificar.");
+            toast.error("Por favor, ingresa el ID del producto a modificar.");  // Toast de error
             return;
         }
 
@@ -65,7 +66,7 @@ export default function AdminProductActions() {
 
         // Si no se cambió ningún campo, no hacemos nada
         if (Object.keys(updatedData).length === 0) {
-            alert("No se han realizado cambios.");
+            toast.error("No se han realizado cambios.");  // Toast de error
             return;
         }
 
@@ -78,60 +79,12 @@ export default function AdminProductActions() {
             imageUrl: "",
             categoryId: "",
         });
+        toast.success("Producto modificado con éxito!");  // Toast de éxito
     };
-
-    // Cargar los productos al iniciar
-    useEffect(() => {
-        // Simulación de llamada a la API
-        const fetchProducts = async () => {
-            const response = await fetch("http://localhost:4002/api/v1/products");
-            const data = await response.json();
-            setProducts(data);  // Guardar los productos en el estado
-        };
-
-        fetchProducts();
-    }, []);
-
-    // Filtrar productos según el término de búsqueda
-    const filteredProducts = (products || []).filter((product) =>
-        product.name.toLowerCase().includes(search.toLowerCase()) || product.id.toString().includes(search)
-    );
 
     return (
         <div className="p-8 text-white">
             <h2 className="text-3xl mb-2 font-bold">Gestión de productos</h2>
-
-            {/* Buscar productos */}
-            <div className="mb-10">
-                <h3 className="text-lg mb-3 font-semibold">Buscar Producto</h3>
-                <input
-                    type="text"
-                    placeholder="Buscar por ID o nombre..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    className="p-2 bg-gray-800 border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 w-full mb-3"
-                />
-                {/* Mostrar lista de productos filtrados */}
-                {search && (
-                    <div className="bg-gray-700 p-2 rounded-lg mt-2">
-                        <ul className="max-h-40 overflow-y-auto">
-                            {filteredProducts.map((product) => (
-                                <li
-                                    key={product.id}
-                                    className="text-white p-2 cursor-pointer hover:bg-gray-600"
-                                    onClick={() => {
-                                        setEditId(product.id);
-                                        setDeleteId(product.id);
-                                        setSearch(""); // Limpiar la búsqueda
-                                    }}
-                                >
-                                    {product.id} - {product.name}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
-            </div>
 
             {/* Agregar producto */}
             <div className="mb-10">
