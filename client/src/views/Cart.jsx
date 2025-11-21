@@ -1,10 +1,11 @@
+// src/views/Cart.jsx
 import { useDispatch, useSelector } from 'react-redux';
-import { removeFromCart, clearCart, updateQuantity } from '../redux/cartSlice'; // Importa las acciones de Redux
+import { removeFromCart, clearCart, updateQuantity } from '../redux/cartSlice'; // Accede a las acciones de Redux
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 export default function Cart() {
-  const { items, total } = useSelector((state) => state.cart); // Accedemos al carrito desde Redux
+  const { items, total } = useSelector((state) => state.cart); // Obtener el carrito desde Redux
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -15,7 +16,6 @@ export default function Cart() {
   const discountEligible = totalItems >= 3;
   const discountPrice = total * 0.8;
 
-  // Reducir la cantidad del producto
   const handleReduceQuantity = (productId) => {
     dispatch(updateQuantity({ productId, quantityChange: -1 }));
     toast.info("Cantidad reducida", {
@@ -29,7 +29,6 @@ export default function Cart() {
     });
   };
 
-  // Eliminar producto completamente
   const handleRemoveFromCart = (productId) => {
     dispatch(removeFromCart(productId));
     toast.info("Producto eliminado del carrito", {
