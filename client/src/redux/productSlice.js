@@ -1,10 +1,12 @@
-import  { createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const URL_API = "http://localhost:4002/api/v1/products";
+
+// Thunks
 export const fetchProducts = createAsyncThunk("products/fetchProducts", async () => {
-const { data } = await axios.get(URL_API)
-return data;
+    const { data } = await axios.get(URL_API);
+    return data;
 });
 
 export const createProduct = createAsyncThunk("products/createProduct", async (productData) => {
@@ -12,33 +14,27 @@ export const createProduct = createAsyncThunk("products/createProduct", async (p
     return data;
 });
 
-const postSlice = createSlice({
+// Slice
+const productSlice = createSlice({
     name: "products",
     initialState: {
-        items: [],
-        loading: false,
-        error: null,
+        products: [],
+        status: null
     },
     reducers: {},
     extraReducers: (builder) => {
         builder
             .addCase(fetchProducts.pending, (state) => {
-                state.loading = true;
-                state.error = null;
+                state.status = 'loading';
             })
             .addCase(fetchProducts.fulfilled, (state, action) => {
-                state.loading = false;
-                state.items = action.payload;
+                state.status = 'succeeded';
+                state.products = action.payload;
             })
-            .addCase(fetchProducts.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.error.message;
-            })
-            .addCase(createProduct.fulfilled, (state, action) => {
-                state.loading = false;
-                state.items = [...state.items, action.payload]; 
+            .addCase(fetchProducts.rejected, (state) => {
+                state.status = 'failed';
             });
-    },
+    }
 });
 
-export default postSlice.reducer;
+export default productSlice.reducer;

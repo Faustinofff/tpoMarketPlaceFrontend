@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import { CartContext } from "../context/CartContext";
+import { toast } from "react-toastify";  // Asegúrate de importar toast
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -33,6 +34,22 @@ export default function ProductDetail() {
   const sinStock = product.stock === 0;
   const imageUrl = product.imageUrl || "/placeholder.png";
 
+  // Función para manejar el evento de agregar al carrito
+  const handleAddToCart = () => {
+    addToCart(product.id);  // Llama a la función de agregar al carrito
+
+    // Muestra el toast de notificación
+    toast.success("Producto agregado al carrito!", {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
   return (
     <div className="max-w-4xl mx-auto p-8 bg-[#0a0a20] rounded-xl shadow-lg text-white mt-10">
       <div className="flex flex-col items-center text-center">
@@ -54,7 +71,7 @@ export default function ProductDetail() {
           </button>
         ) : (
           <button
-            onClick={() => addToCart(product.id)}
+            onClick={handleAddToCart}  // Llama a la función con el toast
             className="bg-gradient-to-r from-[#000033] via-[#1e3fff] to-[#00ffff]
                        text-white font-bold text-base
                        px-8 py-3 rounded-full shadow-lg
