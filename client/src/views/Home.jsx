@@ -1,9 +1,22 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProducts } from "../redux/productSlice";
 import ProductList from '../components/ProductList';
 
 export default function Home() {
+  const dispatch = useDispatch();
+  const { products } = useSelector((state) => state.products);
+
+  // Cargar productos al entrar al home
+  useEffect(() => {
+    if (!products || products.length === 0) {
+      dispatch(fetchProducts());
+    }
+  }, [dispatch, products]);
+
   return (
     <div className="bg-gradient-to-r from-[#000000] via-[#0a0a20] to-[#000033] min-h-screen">
-      
+
       <div className="relative w-full h-[600px] mt-1">
         <img
           src="/ip.png"
@@ -31,10 +44,11 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Pasar mostrarTodos como false para mostrar solo los productos populares */}
+      {/* Productos populares */}
       <div className="mt-10">
         <ProductList mostrarTodos={false} />
       </div>
+
     </div>
   );
 }
