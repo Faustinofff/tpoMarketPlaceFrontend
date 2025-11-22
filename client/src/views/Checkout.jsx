@@ -4,8 +4,7 @@ import { clearCart } from "../redux/cartSlice";
 import { useNavigate } from "react-router-dom";
 
 // ----------------------------------------------------------------------
-// COMPONENTE INPUTFIELD CORREGIDO (DEFINIDO FUERA DE CHECKOUT)
-// Esto previene que el input se re-renderice y pierda el foco en cada tecleo.
+// COMPONENTE INPUTFIELD (DEFINIDO FUERA DE CHECKOUT)
 // ----------------------------------------------------------------------
 const InputField = ({ label, name, value, onChange, placeholder, type = "text", error }) => (
     <div className="mb-4">
@@ -40,7 +39,8 @@ const initialCard = {
     cvc: "",
 };
 
-const DISCOUNT_PERCENTAGE = 10;
+// CAMBIO 1: El porcentaje de descuento es ahora 20%
+const DISCOUNT_PERCENTAGE = 20;
 
 export default function Checkout() {
     const dispatch = useDispatch();
@@ -54,30 +54,37 @@ export default function Checkout() {
     const [cardInfo, setCardInfo] = useState(initialCard);
     const [errors, setErrors] = useState({});
 
-    const subtotal = cart.total;
-    const discountAmount = subtotal * (DISCOUNT_PERCENTAGE / 100);
-    const finalPrice = subtotal - discountAmount;
+    // Paso 1: Calcular la cantidad total de ítems en el carrito
+    const totalItems = cart.items.reduce((acc, item) => acc + item.quantity, 0);
 
-    // Handler para el campo 'name' (Nombre completo)
+    // Paso 2: Determinar si se aplica el descuento (3 o más ítems)
+    const isDiscountApplicable = totalItems >= 3;
+
+    const subtotal = cart.total;
+    
+    // CAMBIO 2: Aplicar el descuento condicionalmente
+    const discountAmount = isDiscountApplicable 
+        ? subtotal * (DISCOUNT_PERCENTAGE / 100) 
+        : 0;
+
+    const finalPrice = subtotal - discountAmount;
+    // --------------------------------------------------------
+
     const handleNameChange = useCallback((e) => {
         setName(e.target.value);
     }, []);
 
-    // Handler para los campos de envío
     const handleShippingChange = useCallback((e) => {
         const { name, value } = e.target;
         setShippingInfo((prev) => ({ ...prev, [name]: value }));
     }, []);
 
-    // Handler para los campos de tarjeta (con la corrección de formato)
     const handleCardChange = useCallback((e) => {
         const { name, value } = e.target;
         let newValue = value;
 
         if (name === "cardNumber") {
             const numericValue = value.replace(/\D/g, "").substring(0, 16);
-            // Corrección: Usamos aserción positiva (?=\d) para no poner espacio al final 
-            // del input y evitar la pérdida de foco.
             newValue = numericValue.replace(/(\d{4})(?=\d)/g, "$1 ");
         }
 
@@ -95,7 +102,7 @@ export default function Checkout() {
         }
 
         setCardInfo((prev) => ({ ...prev, [name]: newValue }));
-    }, []); // Dependencias vacías: solo se crea una vez
+    }, []);
 
     const validate = () => {
         const newErrors = {};
@@ -137,7 +144,6 @@ export default function Checkout() {
         };
 
         try {
-            // Reemplaza con tu URL de backend real
             const response = await fetch("http://localhost:4002/api/v1/orders/checkout", {
                 method: "POST",
                 headers: {
@@ -173,7 +179,7 @@ export default function Checkout() {
                         label="Nombre completo"
                         name="name"
                         value={name}
-                        onChange={handleNameChange} // Usamos el handler estable
+                        onChange={handleNameChange}
                         placeholder="Ingresa tu nombre"
                         error={errors.name}
                     />
@@ -322,9 +328,15 @@ export default function Checkout() {
                             <span>Subtotal:</span>
                             <span>${subtotal.toFixed(2)}</span>
                         </div>
-                        <div className="flex justify-between text-lg mb-1 text-red-400">
+                        <div className="flex justify-between text-lg mb-1"
+                             style={{ color: isDiscountApplicable ? '#48bb78' : '#cbd5e0' }}> 
+                            {/* Color verde si hay descuento, gris si no */}
                             <span>Descuento ({DISCOUNT_PERCENTAGE}%):</span>
-                            <span>-${discountAmount.toFixed(2)}</span>
+                            <span>
+                                {isDiscountApplicable 
+                                    ? `-${discountAmount.toFixed(2)}` 
+                                    : "No aplica"}
+                            </span>
                         </div>
                         <div className="flex justify-between text-lg mb-4">
                             <span>Envío:</span>
