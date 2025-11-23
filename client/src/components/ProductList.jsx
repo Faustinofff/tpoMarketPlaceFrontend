@@ -1,18 +1,18 @@
-// src/components/ProductList.jsx
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import ProductCard from "./ProductCard";
-import { fetchProducts } from "../redux/productSlice";  // Acción de Redux
+import { fetchProducts } from "../redux/productSlice";
 
 const ProductList = ({ mostrarTodos = false }) => {
   const dispatch = useDispatch();
-  const { products, status, error } = useSelector((state) => state.products);  // Accede a estado de Redux
+  const { products, status, error } = useSelector((state) => state.products);
 
+  // Disparar solo si products está vacío (carga inicial)
   useEffect(() => {
-    if (status === "idle") {
-      dispatch(fetchProducts());  // Solo disparar si está en estado 'idle'
+    if (products.length === 0 && status === "idle") {
+      dispatch(fetchProducts());  // Solo cargar si no hay productos
     }
-  }, [dispatch, status]);
+  }, [dispatch, products, status]);
 
   if (status === "loading") {
     return <div className="text-white text-center">Cargando productos...</div>;
@@ -22,7 +22,6 @@ const ProductList = ({ mostrarTodos = false }) => {
     return <div className="text-red-500 text-center">Error: {error}</div>;
   }
 
-  // Limitar a 6 productos si se está mostrando solo los productos populares
   const productosAMostrar = mostrarTodos ? products : products.slice(0, 6);
 
   return (

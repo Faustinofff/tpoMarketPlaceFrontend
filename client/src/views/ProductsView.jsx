@@ -7,45 +7,42 @@ const ProductsView = () => {
   const [categorias, setCategorias] = useState([]);
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null);
   const [search, setSearch] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // Solo controlamos la carga aquí
 
   const URL_API = "http://localhost:4002/api/v1/products";
   const URL_CATEGORIAS = "http://localhost:4002/api/v1/categories";
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [resProd, resCat] = await Promise.all([
-          fetch(URL_API),
-          fetch(URL_CATEGORIAS),
-        ]);
+    // Solo hacemos el fetch si no hay productos cargados
+    if (loading && productos.length === 0) {
+      const fetchData = async () => {
+        try {
+          const [resProd, resCat] = await Promise.all([
+            fetch(URL_API),
+            fetch(URL_CATEGORIAS),
+          ]);
 
-        if (!resProd.ok || !resCat.ok)
-          throw new Error("Error al obtener datos del servidor");
+          if (!resProd.ok || !resCat.ok) throw new Error("Error al obtener datos del servidor");
 
-        const dataProd = await resProd.json();
-        const dataCat = await resCat.json();
+          const dataProd = await resProd.json();
+          const dataCat = await resCat.json();
 
-        setProductos(dataProd);
-        setCategorias(dataCat.content || dataCat); // Soporta paginación o lista directa
-      } catch (error) {
-        console.error("Error al obtener productos o categorías:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+          setProductos(dataProd);
+          setCategorias(dataCat.content || dataCat); // Soporta paginación o lista directa
+        } catch (error) {
+          console.error("Error al obtener productos o categorías:", error);
+        } finally {
+          setLoading(false); // Terminamos la carga
+        }
+      };
 
-    fetchData();
-  }, []);
+      fetchData();
+    }
+  }, [productos.length, loading]); // Depende de la longitud de productos y si está en loading
 
   const filteredProducts = productos.filter((producto) => {
-    const matchSearch = producto.name
-      .toLowerCase()
-      .includes(search.toLowerCase());
-    const matchCategory =
-      !categoriaSeleccionada ||
-      producto.category?.id === categoriaSeleccionada ||
-      producto.category_id === categoriaSeleccionada;
+    const matchSearch = producto.name.toLowerCase().includes(search.toLowerCase());
+    const matchCategory = !categoriaSeleccionada || producto.category?.id === categoriaSeleccionada || producto.category_id === categoriaSeleccionada;
     return matchSearch && matchCategory;
   });
 

@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 import ProductCard from "./ProductCard";
 import { fetchProducts } from "../redux/productSlice";
 
@@ -8,11 +8,12 @@ const LatestProducts = () => {
   const products = useSelector((state) => state.products.products);
 
   useEffect(() => {
-    dispatch(fetchProducts());  // Obtén los productos desde Redux
-  }, [dispatch]);
+    if (!products.length) {
+      dispatch(fetchProducts()); // Solo si no hay productos cargados
+    }
+  }, [dispatch, products.length]); // Solo se dispara si los productos están vacíos
 
-  // Obtener los últimos 3 productos
-  const latestProducts = products.slice(-3);  // Usamos -3 para tomar los últimos 3 productos
+  const latestProducts = products.slice(-3); // Tomamos los últimos 3 productos
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">

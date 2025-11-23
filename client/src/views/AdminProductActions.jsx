@@ -31,8 +31,11 @@ export default function AdminProductActions() {
   const [isSearchClicked, setIsSearchClicked] = useState(false); 
 
   useEffect(() => {
-    if (token) dispatch(fetchProducts(token));
-  }, [dispatch, token]);
+    // Verifica si el token está disponible y si los productos están vacíos
+    if (token && products.length === 0) {
+      dispatch(fetchProducts(token));
+    }
+  }, [dispatch, token, products.length]);
 
   const filteredProducts = products.filter((product) =>
     product.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -100,7 +103,7 @@ export default function AdminProductActions() {
   return (
     <div className="p-8 text-white">
       <h2 className="text-3xl mb-2 font-bold">Gestión de productos</h2>
-
+      
       {/* Barra de búsqueda */}
       <div className="flex justify-center mb-10 relative">
         <input
