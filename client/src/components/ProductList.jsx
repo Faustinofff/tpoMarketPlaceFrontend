@@ -1,21 +1,24 @@
+// src/components/ProductList.jsx
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import ProductCard from "./ProductCard";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../redux/productSlice";
+import { fetchProducts } from "../redux/productSlice";  // Acción de Redux
 
 const ProductList = ({ mostrarTodos = false }) => {
   const dispatch = useDispatch();
-  const { products = [], error, loading } = useSelector((state) => state.products);
+  const { products, status, error } = useSelector((state) => state.products);  // Accede a estado de Redux
 
   useEffect(() => {
-    dispatch(fetchProducts());
-  }, [dispatch]);
+    if (status === "idle") {
+      dispatch(fetchProducts());  // Solo disparar si está en estado 'idle'
+    }
+  }, [dispatch, status]);
 
-  if (loading) {
+  if (status === "loading") {
     return <div className="text-white text-center">Cargando productos...</div>;
   }
 
-  if (error) {
+  if (status === "failed") {
     return <div className="text-red-500 text-center">Error: {error}</div>;
   }
 
@@ -52,5 +55,3 @@ const ProductList = ({ mostrarTodos = false }) => {
 };
 
 export default ProductList;
-
-
