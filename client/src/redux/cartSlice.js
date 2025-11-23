@@ -4,14 +4,11 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // URL del backend
 const API_URL = "http://localhost:4002/api/v1/cart";
 
-// Obtener el token del localStorage
-const getToken = () => localStorage.getItem("token");
-
 // 🔹 Acción asíncrona para sincronizar el carrito con el backend
 export const syncAddToCart = createAsyncThunk(
   "cart/syncAddToCart",
-  async ({ productId, quantity }) => {
-    const token = getToken();
+  async ({ productId, quantity }, { getState }) => {
+    const token = getState().auth.token; // Obtenemos token desde Redux
     const response = await fetch(
       `${API_URL}/add?productId=${productId}&quantity=${quantity}`,
       {
