@@ -5,11 +5,10 @@ const ProductCard = ({ id, nombre, precio, imagenUrl }) => {
 
   return (
     <Link
-      to={`/producto/${id}`}
+      to={`/producto/${id}`}   // 👈 clave
       className="bg-[#0a0a20] rounded-2xl border border-gray-700 shadow-md hover:scale-105 transition-transform flex flex-col overflow-hidden w-[260px] h-[420px] no-underline"
-      style={{ color: "white", textDecoration: "none" }} 
+      style={{ color: "white", textDecoration: "none" }}
     >
-      
       <div className="w-full aspect-square overflow-hidden">
         <img
           src={imagenUrl}
@@ -18,7 +17,6 @@ const ProductCard = ({ id, nombre, precio, imagenUrl }) => {
         />
       </div>
 
-      
       <div className="p-3 flex-1 flex flex-col justify-center gap-1">
         <h3
           style={{
