@@ -1,9 +1,11 @@
+// src/redux/authSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+// URL del backend para autenticación
 const AUTH_URL = "http://localhost:4002/api/v1/auth/authenticate";
 
-// Thunk para iniciar sesión
+// Thunk asincrónico para login
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async ({ email, password }, thunkAPI) => {
@@ -16,36 +18,41 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-// Cargar token desde localStorage si existe
-const savedToken = localStorage.getItem("token");
-
+// Slice de Redux para autenticación
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    token: savedToken || null,
-    role: savedToken ? JSON.parse(atob(savedToken.split(".")[1])).role : null,
+    token: null,
+    role: null,
     status: "idle",
     error: null,
   },
   reducers: {
+    // Acción para cerrar sesión
     logout: (state) => {
       state.token = null;
       state.role = null;
-      localStorage.removeItem("token");
+      state.status = "idle";
+      state.error = null;
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(loginUser.pending, (state) => {
         state.status = "loading";
+        state.error = null;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.token = action.payload;
-        localStorage.setItem("token", action.payload);
 
-        const payload = JSON.parse(atob(action.payload.split(".")[1]));
-        state.role = payload.role;
+        // Decodificar el payload del JWT para obtener el rol
+        try {
+          const payload = JSON.parse(atob(action.payload.split(".")[1]));
+          state.role = payload.role;
+        } catch (err) {
+          state.role = null;
+        }
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.status = "failed";
@@ -54,5 +61,6 @@ const authSlice = createSlice({
   },
 });
 
+// Exportar acciones y reducer
 export const { logout } = authSlice.actions;
 export default authSlice.reducer;

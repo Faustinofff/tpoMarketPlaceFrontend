@@ -1,11 +1,14 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../redux/authSlice';
 
 export default function Navigation() {
-  const token = localStorage.getItem('token');
-  const userRole = token ? JSON.parse(atob(token.split('.')[1])).role : null;
-  const [search, setSearch] = useState('');
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const token = useSelector((state) => state.auth?.token);
+  const [search, setSearch] = useState('');
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -13,6 +16,10 @@ export default function Navigation() {
       navigate(`/productos?query=${encodeURIComponent(search)}`);
       setSearch('');
     }
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
   };
 
   return (
@@ -27,7 +34,6 @@ export default function Navigation() {
     >
       <h1 className="text-2xl font-bold text-white">ElectroShop</h1>
 
-      
       <form onSubmit={handleSearch} className="flex items-center gap-2">
         <input
           type="text"
@@ -47,7 +53,6 @@ export default function Navigation() {
         </button>
       </form>
 
-      {/* LINKS */}
       <div style={{ display: 'flex', gap: '40px' }}>
         <Link
           to="/home"
@@ -76,14 +81,26 @@ export default function Navigation() {
           Carrito
         </Link>
 
-        <Link
-          to="/login"
-          className="relative px-4 py-2 rounded-full transition-all duration-300 
-                     hover:bg-gradient-to-r from-[#000033] via-[#1e3fff] to-[#00ffff]"
-          style={{ color: 'white', textDecoration: 'none' }}
-        >
-          Login
-        </Link>
+        {!token && (
+          <Link
+            to="/login"
+            className="relative px-4 py-2 rounded-full transition-all duration-300 
+                       hover:bg-gradient-to-r from-[#000033] via-[#1e3fff] to-[#00ffff]"
+            style={{ color: 'white', textDecoration: 'none' }}
+          >
+            Login
+          </Link>
+        )}
+
+        {token && (
+          <button
+            onClick={handleLogout}
+            className="relative px-4 py-2 rounded-full transition-all duration-300 
+                       hover:bg-gradient-to-r from-[#ff4d4d] via-[#ff1a1a] to-[#ff4d4d] text-white font-semibold"
+          >
+            Cerrar Sesión
+          </button>
+        )}
 
         <Link
           to="/contact"
@@ -94,6 +111,7 @@ export default function Navigation() {
           Sobre nosotros
         </Link>
 
+        {/* 🔹 Gestión de Productos aparece SIEMPRE */}
         <Link
           to="/admin"
           className="relative px-4 py-2 rounded-full transition-all duration-300 

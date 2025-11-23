@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { addToCart } from "../redux/cartSlice"; // Accede a la acción de agregar al carrito
-import { toast } from "react-toastify"; // Muestra notificaciones
+import { useDispatch, useSelector } from "react-redux"; // Importar useSelector
+import { addToCart } from "../redux/cartSlice";
+import { toast } from "react-toastify";
 
 export default function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth.token); // Tomar token desde Redux
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -28,46 +29,47 @@ export default function ProductDetail() {
   }, [id]);
 
   const handleAddToCart = async () => {
-  try {
-    // 🔹 1. Agregar al carrito local (Redux)
-    dispatch(addToCart({ product, quantity: 1 }));
+    try {
+      // 🔹 1. Agregar al carrito local (Redux)
+      dispatch(addToCart({ product, quantity: 1 }));
 
-    // 🔹 2. Sincronizar con el backend
-    const token = localStorage.getItem("token"); // o donde guardes el JWT
-    if (!token) {
-      toast.error("Debes iniciar sesión para agregar al carrito");
-      return;
-    }
-
-    const response = await fetch(
-      `http://localhost:4002/api/v1/cart/add?productId=${product.id}&quantity=1`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      // 🔹 2. Sincronizar con el backend usando token desde Redux
+      if (!token) {
+        toast.error("Debes iniciar sesión para agregar al carrito");
+        return;
       }
-    );
 
-    if (!response.ok) {
-      throw new Error("Error al sincronizar con el carrito del backend");
+      const response = await fetch(
+        `http://localhost:4002/api/v1/cart/add?productId=${product.id}&quantity=1`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Error al sincronizar con el carrito del backend");
+      }
+
+      toast.success("Producto agregado al carrito 🛒", {
+        position: "top-right",
+        autoClose: 2500,
+      });
+    } catch (error) {
+      console.error("Error al agregar al carrito:", error);
+      toast.error("No se pudo agregar al carrito");
     }
-
-    toast.success("Producto agregado al carrito 🛒", {
-      position: "top-right",
-      autoClose: 2500,
-    });
-  } catch (error) {
-    console.error("Error al agregar al carrito:", error);
-    toast.error("No se pudo agregar al carrito");
-  }
-};
+  };
 
   if (loading) return <p className="text-white">Cargando producto...</p>;
   if (!product) return <p className="text-red-500">Producto no encontrado</p>;
 
-  const precioFormateado = product.price ? Number(product.price).toLocaleString("es-AR") : "N/A";
-  const imageUrl = product.imageUrl || "/placeholder.png"; // Si no hay imagen, mostrar la de reemplazo
+  const precioFormateado = product.price
+    ? Number(product.price).toLocaleString("es-AR")
+    : "N/A";
+  const imageUrl = product.imageUrl || "/placeholder.png";
 
   return (
     <div className="max-w-4xl mx-auto p-8 bg-[#0a0a20] rounded-xl shadow-lg text-white mt-10">
@@ -82,7 +84,7 @@ export default function ProductDetail() {
         <p className="text-gray-400 mb-8">{product.description}</p>
 
         <button
-          onClick={handleAddToCart}  // Llama a la función con el toast
+          onClick={handleAddToCart}
           className="bg-gradient-to-r from-[#000033] via-[#1e3fff] to-[#00ffff]
                      text-white font-bold text-base px-8 py-3 rounded-full shadow-lg
                      hover:scale-105 transition-transform duration-300"

@@ -48,9 +48,8 @@ export default function Checkout() {
   const navigate = useNavigate();
   const cart = useSelector((state) => state.cart);
 
-  // 🔹 Tomo el token de Redux y, si no hay, uso el de localStorage
-  const reduxToken = useSelector((state) => state.auth?.token);
-  const token = reduxToken || localStorage.getItem("token");
+  // 🔹 Tomar el token directamente desde Redux (sin fallback)
+  const token = useSelector((state) => state.auth?.token);
 
   const [name, setName] = useState("");
   const [shippingInfo, setShippingInfo] = useState(initialShipping);
@@ -58,25 +57,15 @@ export default function Checkout() {
   const [cardInfo, setCardInfo] = useState(initialCard);
   const [errors, setErrors] = useState({});
 
-  // Paso 1: Calcular la cantidad total de ítems en el carrito
   const totalItems = cart.items.reduce((acc, item) => acc + item.quantity, 0);
-
-  // Paso 2: Determinar si se aplica el descuento (3 o más ítems)
   const isDiscountApplicable = totalItems >= 3;
-
   const subtotal = cart.total;
-
-  // CAMBIO 2: Aplicar el descuento condicionalmente
   const discountAmount = isDiscountApplicable
     ? subtotal * (DISCOUNT_PERCENTAGE / 100)
     : 0;
-
   const finalPrice = subtotal - discountAmount;
-  // --------------------------------------------------------
 
-  const handleNameChange = useCallback((e) => {
-    setName(e.target.value);
-  }, []);
+  const handleNameChange = useCallback((e) => setName(e.target.value), []);
 
   const handleShippingChange = useCallback((e) => {
     const { name, value } = e.target;
@@ -94,11 +83,9 @@ export default function Checkout() {
 
     if (name === "expiryDate") {
       const numericValue = value.replace(/\D/g, "").substring(0, 4);
-      if (numericValue.length > 2) {
-        newValue = numericValue.substring(0, 2) + "/" + numericValue.substring(2, 4);
-      } else {
-        newValue = numericValue;
-      }
+      newValue = numericValue.length > 2
+        ? numericValue.substring(0, 2) + "/" + numericValue.substring(2, 4)
+        : numericValue;
     }
 
     if (name === "cvc") {
@@ -148,7 +135,6 @@ export default function Checkout() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        // 🔹 Solo enviamos name porque es lo que el backend espera
         body: JSON.stringify({ name }),
       });
 
@@ -171,9 +157,9 @@ export default function Checkout() {
       <h2 className="text-3xl mb-8 font-extrabold border-b border-gray-700 pb-4">🧾 Finalizar compra</h2>
 
       <div className="grid md:grid-cols-2 gap-12">
+        {/* Información de envío */}
         <div className="bg-gray-900 p-6 rounded-lg shadow-xl">
           <h3 className="text-xl font-bold mb-4 text-[#00ffff]">1. Información de Envío</h3>
-
           <InputField
             label="Nombre completo"
             name="name"
@@ -182,7 +168,6 @@ export default function Checkout() {
             placeholder="Ingresa tu nombre"
             error={errors.name}
           />
-
           <div className="grid grid-cols-2 gap-4">
             <InputField
               label="Correo electrónico"
@@ -201,7 +186,6 @@ export default function Checkout() {
               placeholder="Ej. +54 9 11 xxxx-xxxx"
             />
           </div>
-
           <InputField
             label="Dirección (Calle y número)"
             name="address"
@@ -210,7 +194,6 @@ export default function Checkout() {
             placeholder="Calle Falsa 123"
             error={errors.address}
           />
-
           <div className="grid grid-cols-3 gap-4">
             <InputField
               label="Ciudad"
@@ -237,9 +220,10 @@ export default function Checkout() {
           </div>
         </div>
 
+        {/* Método de pago */}
         <div className="bg-gray-900 p-6 rounded-lg shadow-xl">
           <h3 className="text-xl font-bold mb-4 text-[#00ffff]">2. Método de Pago</h3>
-
+          {/* Tarjeta / Mercado Pago */}
           <div className="flex space-x-4 mb-6">
             <label className="flex items-center space-x-2 cursor-pointer">
               <input
@@ -321,6 +305,7 @@ export default function Checkout() {
             </div>
           )}
 
+          {/* Resumen */}
           <div className="mt-8 pt-4 border-t border-gray-700">
             <h3 className="text-xl font-bold mb-4">Resumen de la Orden</h3>
             <div className="flex justify-between text-lg mb-1">
@@ -360,3 +345,4 @@ export default function Checkout() {
     </div>
   );
 }
+    
