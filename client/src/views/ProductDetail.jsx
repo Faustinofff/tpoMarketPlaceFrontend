@@ -27,18 +27,41 @@ export default function ProductDetail() {
     fetchProduct();
   }, [id]);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
+  try {
+    // 🔹 1. Agregar al carrito local (Redux)
     dispatch(addToCart({ product, quantity: 1 }));
-    toast.success("Producto agregado al carrito", {
+
+    // 🔹 2. Sincronizar con el backend
+    const token = localStorage.getItem("token"); // o donde guardes el JWT
+    if (!token) {
+      toast.error("Debes iniciar sesión para agregar al carrito");
+      return;
+    }
+
+    const response = await fetch(
+      `http://localhost:4002/api/v1/cart/add?productId=${product.id}&quantity=1`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Error al sincronizar con el carrito del backend");
+    }
+
+    toast.success("Producto agregado al carrito 🛒", {
       position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
+      autoClose: 2500,
     });
-  };
+  } catch (error) {
+    console.error("Error al agregar al carrito:", error);
+    toast.error("No se pudo agregar al carrito");
+  }
+};
 
   if (loading) return <p className="text-white">Cargando producto...</p>;
   if (!product) return <p className="text-red-500">Producto no encontrado</p>;
