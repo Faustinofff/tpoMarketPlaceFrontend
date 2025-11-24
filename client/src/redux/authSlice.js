@@ -1,11 +1,11 @@
-// src/redux/authSlice.js
+
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// URL del backend para autenticación
+
 const AUTH_URL = "http://localhost:4002/api/v1/auth/authenticate";
 
-// Thunk asincrónico para login
+
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async ({ email, password }, thunkAPI) => {
@@ -18,7 +18,7 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-// Slice de Redux para autenticación
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -28,7 +28,7 @@ const authSlice = createSlice({
     error: null,
   },
   reducers: {
-    // Acción para cerrar sesión
+    
     logout: (state) => {
       state.token = null;
       state.role = null;
@@ -46,7 +46,7 @@ const authSlice = createSlice({
         state.status = "succeeded";
         state.token = action.payload;
 
-        // Decodificar el payload del JWT para obtener el rol
+        
         try {
           const payload = JSON.parse(atob(action.payload.split(".")[1]));
           state.role = payload.role;
@@ -61,6 +61,6 @@ const authSlice = createSlice({
   },
 });
 
-// Exportar acciones y reducer
+
 export const { logout } = authSlice.actions;
 export default authSlice.reducer;

@@ -1,6 +1,6 @@
 // src/views/Cart.jsx
 import { useDispatch, useSelector } from 'react-redux';
-import { removeFromCart, clearCart, updateQuantity } from '../redux/cartSlice'; // Accede a las acciones de Redux
+import { removeFromCart, clearCart, updateQuantity } from '../redux/cartSlice'; 
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 

@@ -1,7 +1,7 @@
 // src/views/Home.jsx
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../redux/productSlice"; // Acción para obtener productos
+import { fetchProducts } from "../redux/productSlice"; 
 import ProductList from "../components/ProductList";
 
 export default function Home() {
@@ -10,7 +10,7 @@ export default function Home() {
 
   useEffect(() => {
     if (status === "idle") {
-      dispatch(fetchProducts()); // Llamar solo si no se ha hecho ya
+      dispatch(fetchProducts()); 
     }
   }, [dispatch, status]);
 

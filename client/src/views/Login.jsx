@@ -1,4 +1,4 @@
-// src/views/Login.jsx
+
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser, logout } from "../redux/authSlice";
@@ -13,7 +13,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // Si ya hay token, redirige a home automáticamente
+  
   useEffect(() => {
     if (token) {
       navigate("/home");
@@ -30,7 +30,7 @@ const Login = () => {
     navigate("/login");
   };
 
-  // Mostrar pantalla diferente si ya hay token
+  
   if (token) {
     return (
       <div className="bg-gradient-to-r from-[#000000] via-[#0a0a20] to-[#000033] min-h-screen flex flex-col justify-center items-center">

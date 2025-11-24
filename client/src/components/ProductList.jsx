@@ -7,10 +7,9 @@ const ProductList = ({ mostrarTodos = false }) => {
   const dispatch = useDispatch();
   const { products, status, error } = useSelector((state) => state.products);
 
-  // Disparar solo si products está vacío (carga inicial)
   useEffect(() => {
     if (products.length === 0 && status === "idle") {
-      dispatch(fetchProducts());  // Solo cargar si no hay productos
+      dispatch(fetchProducts());
     }
   }, [dispatch, products, status]);
 

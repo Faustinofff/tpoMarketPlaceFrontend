@@ -9,11 +9,11 @@ const LatestProducts = () => {
 
   useEffect(() => {
     if (!products.length) {
-      dispatch(fetchProducts()); // Solo si no hay productos cargados
+      dispatch(fetchProducts());
     }
-  }, [dispatch, products.length]); // Solo se dispara si los productos están vacíos
+  }, [dispatch, products.length]);
 
-  const latestProducts = products.slice(-3); // Tomamos los últimos 3 productos
+  const latestProducts = products.slice(-3);
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">

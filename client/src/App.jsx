@@ -4,15 +4,15 @@ import Home from './views/Home';
 import Navigation from './views/Navigation';
 import ProductsView from './views/ProductsView';
 import ProductDetail from './views/ProductDetail';
-import { Routes, Route } from 'react-router-dom';  // Asegúrate de importar Routes y Route
+import { Routes, Route } from 'react-router-dom';
 import Login from './views/Login';
 import Cart from "./views/Cart.jsx";
 import Checkout from "./views/Checkout.jsx";
 import OrderConfirmation from "./views/OrderConfirmation.jsx";
 import AdminProductActions from "./views/AdminProductActions";
 import Footer from "./views/Footer";
-import { ToastContainer } from 'react-toastify'; // Importa ToastContainer
-import 'react-toastify/dist/ReactToastify.css'; // Importa los estilos de Toastify
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
@@ -35,7 +35,7 @@ function App() {
       </div>
 
       <Footer />
-      <ToastContainer /> {/* Aquí agregamos el ToastContainer */}
+      <ToastContainer />
     </div>
   );
 }

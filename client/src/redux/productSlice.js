@@ -1,19 +1,15 @@
-// src/redux/productSlice.js
+
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Definimos la URL de la API
+
 const URL_API = "http://localhost:4002/api/v1/products";
 
-// =========================
-// Thunks para interactuar con la API
-// =========================
 
-// Recupera los productos
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
   async (_, thunkAPI) => {
-    const token = thunkAPI.getState().auth.token; // Tomamos el token de Redux
+    const token = thunkAPI.getState().auth.token;
     const { data } = await axios.get(URL_API, {
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -58,9 +54,7 @@ export const deleteProduct = createAsyncThunk(
   }
 );
 
-// =========================
-// Slice de Redux
-// =========================
+
 const productSlice = createSlice({
   name: "products",
   initialState: {
@@ -70,7 +64,7 @@ const productSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // fetchProducts
+      
       .addCase(fetchProducts.pending, (state) => {
         state.status = "loading";
       })
@@ -81,11 +75,11 @@ const productSlice = createSlice({
       .addCase(fetchProducts.rejected, (state) => {
         state.status = "failed";
       })
-      // createProduct
+      
       .addCase(createProduct.fulfilled, (state, action) => {
         state.products.push(action.payload);
       })
-      // updateProduct
+      
       .addCase(updateProduct.fulfilled, (state, action) => {
         const index = state.products.findIndex(
           (product) => product.id === action.payload.id
@@ -94,7 +88,7 @@ const productSlice = createSlice({
           state.products[index] = action.payload;
         }
       })
-      // deleteProduct
+      
       .addCase(deleteProduct.fulfilled, (state, action) => {
         state.products = state.products.filter(
           (product) => product.id !== action.payload.id

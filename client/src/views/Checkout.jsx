@@ -3,9 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { clearCart } from "../redux/cartSlice";
 import { useNavigate } from "react-router-dom";
 
-// ----------------------------------------------------------------------
-// COMPONENTE INPUTFIELD (DEFINIDO FUERA DE CHECKOUT)
-// ----------------------------------------------------------------------
+
+
 const InputField = ({ label, name, value, onChange, placeholder, type = "text", error }) => (
   <div className="mb-4">
     <label className="block mb-1 text-sm font-medium">{label}</label>
@@ -22,7 +21,7 @@ const InputField = ({ label, name, value, onChange, placeholder, type = "text", 
   </div>
 );
 
-// ----------------------------------------------------------------------
+
 
 const initialShipping = {
   email: "",
@@ -40,7 +39,7 @@ const initialCard = {
   cvc: "",
 };
 
-// CAMBIO 1: El porcentaje de descuento es ahora 20%
+
 const DISCOUNT_PERCENTAGE = 20;
 
 export default function Checkout() {
@@ -48,7 +47,7 @@ export default function Checkout() {
   const navigate = useNavigate();
   const cart = useSelector((state) => state.cart);
 
-  // 🔹 Tomar el token directamente desde Redux (sin fallback)
+  
   const token = useSelector((state) => state.auth?.token);
 
   const [name, setName] = useState("");

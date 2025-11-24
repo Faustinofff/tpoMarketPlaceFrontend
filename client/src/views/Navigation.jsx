@@ -111,7 +111,7 @@ export default function Navigation() {
           Sobre nosotros
         </Link>
 
-        {/* 🔹 Gestión de Productos aparece SIEMPRE */}
+        
         <Link
           to="/admin"
           className="relative px-4 py-2 rounded-full transition-all duration-300 

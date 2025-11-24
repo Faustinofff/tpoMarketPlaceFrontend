@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from "react";
 import ProductCard from "../components/ProductCard";
-import LatestProducts from "../components/LatestProducts";  // Asegúrate de importar LatestProducts
+import LatestProducts from "../components/LatestProducts";
 
 const ProductsView = () => {
   const [productos, setProductos] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null);
   const [search, setSearch] = useState("");
-  const [loading, setLoading] = useState(true); // Solo controlamos la carga aquí
+  const [loading, setLoading] = useState(true);
 
   const URL_API = "http://localhost:4002/api/v1/products";
   const URL_CATEGORIAS = "http://localhost:4002/api/v1/categories";
 
   useEffect(() => {
-    // Solo hacemos el fetch si no hay productos cargados
     if (loading && productos.length === 0) {
       const fetchData = async () => {
         try {
@@ -28,11 +27,11 @@ const ProductsView = () => {
           const dataCat = await resCat.json();
 
           setProductos(dataProd);
-          setCategorias(dataCat.content || dataCat); // Soporta paginación o lista directa
+          setCategorias(dataCat.content || dataCat);
         } catch (error) {
           console.error("Error al obtener productos o categorías:", error);
         } finally {
-          setLoading(false); // Terminamos la carga
+          setLoading(false);
         }
       };
 

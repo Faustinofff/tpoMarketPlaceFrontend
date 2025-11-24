@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux"; // Importar useSelector
+import { useDispatch, useSelector } from "react-redux"; 
 import { addToCart } from "../redux/cartSlice";
 import { toast } from "react-toastify";
 
@@ -9,7 +9,7 @@ export default function ProductDetail() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
-  const token = useSelector((state) => state.auth.token); // Tomar token desde Redux
+  const token = useSelector((state) => state.auth.token); 
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -30,10 +30,9 @@ export default function ProductDetail() {
 
   const handleAddToCart = async () => {
     try {
-      // 🔹 1. Agregar al carrito local (Redux)
       dispatch(addToCart({ product, quantity: 1 }));
 
-      // 🔹 2. Sincronizar con el backend usando token desde Redux
+
       if (!token) {
         toast.error("Debes iniciar sesión para agregar al carrito");
         return;
