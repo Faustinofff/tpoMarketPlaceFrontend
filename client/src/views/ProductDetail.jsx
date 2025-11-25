@@ -1,70 +1,67 @@
-import { useEffect, useState } from "react";
+// src/views/ProductDetail.jsx
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux"; 
-import { addToCart } from "../redux/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
+// Importar thunks y acciones del productDetailSlice
+import { fetchProductById } from "../redux/productDetailSlice"; 
+// Importar la acción de carrito local y la thunk de sincronización
+import { addToCart, syncCartWithBackend } from "../redux/cartSlice"; 
 import { toast } from "react-toastify";
 
 export default function ProductDetail() {
   const { id } = useParams();
-  const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
-  const token = useSelector((state) => state.auth.token); 
+  
+  // Leer del store de Redux
+  const product = useSelector((state) => state.productDetail.product);
+  const loadingStatus = useSelector((state) => state.productDetail.status);
+  const token = useSelector((state) => state.auth.token);
+  
+  const loading = loadingStatus === "loading";
 
+  // useEffect solo despacha la acción de Redux
   useEffect(() => {
-    const fetchProduct = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(`http://localhost:4002/api/v1/products/${id}`);
-        if (!res.ok) throw new Error("Producto no encontrado");
-        const data = await res.json();
-        setProduct(data);
-      } catch (err) {
-        console.error("Error al obtener el producto:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProduct();
-  }, [id]);
+    if (id) {
+      dispatch(fetchProductById(id));
+    }
+  }, [id, dispatch]);
 
   const handleAddToCart = async () => {
-    try {
-      dispatch(addToCart({ product, quantity: 1 }));
-
-
-      if (!token) {
-        toast.error("Debes iniciar sesión para agregar al carrito");
+    if (!product) {
+        toast.error("El producto no está disponible.");
         return;
-      }
+    }
 
-      const response = await fetch(
-        `http://localhost:4002/api/v1/cart/add?productId=${product.id}&quantity=1`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+    // 1. **Acción LOCAL (Inmediata):** Actualiza el estado de Redux localmente
+    const productData = { product, quantity: 1 };
+    dispatch(addToCart(productData));
 
-      if (!response.ok) {
-        throw new Error("Error al sincronizar con el carrito del backend");
-      }
+    // Si no hay token, no intentamos sincronizar y mostramos un error de UI
+    if (!token) {
+      toast.error("Debes iniciar sesión para agregar al carrito");
+      return;
+    }
+    
+    // 2. **Acción REMOTA:** Despacha la thunk para sincronizar con el backend
+    const resultAction = await dispatch(
+      syncCartWithBackend({ productId: product.id, quantity: 1 })
+    );
 
-      toast.success("Producto agregado al carrito 🛒", {
-        position: "top-right",
-        autoClose: 2500,
-      });
-    } catch (error) {
-      console.error("Error al agregar al carrito:", error);
-      toast.error("No se pudo agregar al carrito");
+    // 3. Maneja el resultado de la thunk (éxito o fracaso)
+    if (syncCartWithBackend.fulfilled.match(resultAction)) {
+      toast.success("Producto agregado al carrito 🛒", { autoClose: 2500 });
+    } else {
+      // Usa el mensaje de error que definimos en la thunk
+      const error = resultAction.payload;
+      console.error("Error al sincronizar carrito:", error);
+      toast.error("No se pudo sincronizar con el carrito del backend");
     }
   };
 
   if (loading) return <p className="text-white">Cargando producto...</p>;
   if (!product) return <p className="text-red-500">Producto no encontrado</p>;
 
+  // ... Renderizado
   const precioFormateado = product.price
     ? Number(product.price).toLocaleString("es-AR")
     : "N/A";

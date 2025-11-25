@@ -1,43 +1,38 @@
+// src/views/ProductsView.jsx
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+// Thunks para obtener productos y categorías
+import { fetchProducts } from "../redux/productSlice"; // Ya existía
+import { fetchCategories } from "../redux/categorySlice"; // ¡NUEVO!
 import ProductCard from "../components/ProductCard";
 import LatestProducts from "../components/LatestProducts";
 
 const ProductsView = () => {
-  const [productos, setProductos] = useState([]);
-  const [categorias, setCategorias] = useState([]);
+  const dispatch = useDispatch();
+  
+  // Leer del store de Redux
+  const productos = useSelector((state) => state.products.products);
+  const loadingProductsStatus = useSelector((state) => state.products.status);
+  const categorias = useSelector((state) => state.categories.categories);
+  const loadingCategoriesStatus = useSelector((state) => state.categories.status);
+
+  // Estados locales para la UI (filtrado y búsqueda)
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null);
   const [search, setSearch] = useState("");
-  const [loading, setLoading] = useState(true);
 
-  const URL_API = "http://localhost:4002/api/v1/products";
-  const URL_CATEGORIAS = "http://localhost:4002/api/v1/categories";
+  const loading = loadingProductsStatus === "loading" || loadingCategoriesStatus === "loading";
 
+  // useEffect solo despacha las acciones de Redux
   useEffect(() => {
-    if (loading && productos.length === 0) {
-      const fetchData = async () => {
-        try {
-          const [resProd, resCat] = await Promise.all([
-            fetch(URL_API),
-            fetch(URL_CATEGORIAS),
-          ]);
-
-          if (!resProd.ok || !resCat.ok) throw new Error("Error al obtener datos del servidor");
-
-          const dataProd = await resProd.json();
-          const dataCat = await resCat.json();
-
-          setProductos(dataProd);
-          setCategorias(dataCat.content || dataCat);
-        } catch (error) {
-          console.error("Error al obtener productos o categorías:", error);
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      fetchData();
+    // Cargar productos si el estado es 'idle'
+    if (loadingProductsStatus === "idle") { 
+      dispatch(fetchProducts());
     }
-  }, [productos.length, loading]); // Depende de la longitud de productos y si está en loading
+    // Cargar categorías si el estado es 'idle'
+    if (loadingCategoriesStatus === "idle") { 
+      dispatch(fetchCategories());
+    }
+  }, [dispatch, loadingProductsStatus, loadingCategoriesStatus]);
 
   const filteredProducts = productos.filter((producto) => {
     const matchSearch = producto.name.toLowerCase().includes(search.toLowerCase());
@@ -53,6 +48,7 @@ const ProductsView = () => {
     );
   }
 
+  // ... Renderizado
   return (
     <div className="bg-gradient-to-r from-[#000000] via-[#0a0a20] to-[#000033] min-h-screen pt-20">
       <div className="max-w-7xl mx-auto px-6 pb-16">
@@ -76,7 +72,7 @@ const ProductsView = () => {
           <h2 className="text-3xl font-bold text-white text-center mb-8">
             ¡Últimos Productos!
           </h2>
-          <LatestProducts /> {/* Aquí estamos usando el componente LatestProducts */}
+          <LatestProducts />
         </div>
 
         {/* Filtro por categorías */}
