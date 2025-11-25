@@ -1,15 +1,15 @@
-// src/redux/categorySlice.js
+
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Thunk para obtener todas las categorías
+
 export const fetchCategories = createAsyncThunk(
   "categories/fetchCategories",
   async (_, thunkAPI) => {
     try {
       const URL_CATEGORIAS = "http://localhost:4002/api/v1/categories";
       const { data } = await axios.get(URL_CATEGORIAS);
-      // Asume que las categorías pueden estar en data o data.content
+      
       return data.content || data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || "Error de red al obtener categorías");
@@ -21,7 +21,7 @@ const categorySlice = createSlice({
   name: "categories",
   initialState: {
     categories: [],
-    status: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed'
+    status: "idle", 
     error: null,
   },
   reducers: {},

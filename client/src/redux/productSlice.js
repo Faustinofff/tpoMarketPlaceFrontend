@@ -17,7 +17,7 @@ export const fetchProducts = createAsyncThunk(
   }
 );
 
-// Crear un producto
+
 export const createProduct = createAsyncThunk(
   "products/createProduct",
   async (productData, thunkAPI) => {
@@ -29,12 +29,12 @@ export const createProduct = createAsyncThunk(
   }
 );
 
-// Actualizar un producto
+
 export const updateProduct = createAsyncThunk(
   "products/updateProduct",
   async (updatedProduct, thunkAPI) => {
     const token = thunkAPI.getState().auth.token;
-    const { id, ...rest } = updatedProduct; // rest contiene name, price, stock, categoryId, imageUrl
+    const { id, ...rest } = updatedProduct; 
     const { data } = await axios.put(`${URL_API}/${id}`, rest, {
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -42,7 +42,7 @@ export const updateProduct = createAsyncThunk(
   }
 );
 
-// Eliminar un producto
+
 export const deleteProduct = createAsyncThunk(
   "products/deleteProduct",
   async (id, thunkAPI) => {
@@ -50,7 +50,7 @@ export const deleteProduct = createAsyncThunk(
     const { data } = await axios.delete(`${URL_API}/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    return { id }; // retornamos el id para filtrar en el estado
+    return { id }; 
   }
 );
 
